@@ -91,8 +91,40 @@ export default function StudentMessagesPage() {
       : conversation.participant1;
   };
 
+  const detectContactInfo = (content: string): { hasContactInfo: boolean; reason?: string } => {
+    // Email pattern
+    const emailPattern = /\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b/;
+    // Phone pattern (various formats)
+    const phonePattern = /(\+?\d{1,3}[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}|\d{10,}/;
+    // Telegram/WhatsApp mentions
+    const telegramPattern = /(telegram|t\.me|@\w+)/i;
+    const whatsappPattern = /(whatsapp|wa\.me|\+?\d{10,})/i;
+    
+    if (emailPattern.test(content)) {
+      return { hasContactInfo: true, reason: 'Email address detected' };
+    }
+    if (phonePattern.test(content)) {
+      return { hasContactInfo: true, reason: 'Phone number detected' };
+    }
+    if (telegramPattern.test(content)) {
+      return { hasContactInfo: true, reason: 'Telegram handle detected' };
+    }
+    if (whatsappPattern.test(content)) {
+      return { hasContactInfo: true, reason: 'WhatsApp number detected' };
+    }
+    
+    return { hasContactInfo: false };
+  };
+
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || !user) return;
+
+    // Client-side detection before API call
+    const contactCheck = detectContactInfo(newMessage);
+    if (contactCheck.hasContactInfo) {
+      alert(`Sharing contact information is not allowed. ${contactCheck.reason}. Please use the platform messaging system to communicate.`);
+      return;
+    }
 
     try {
       setSending(true);

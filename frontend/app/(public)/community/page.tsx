@@ -55,12 +55,26 @@ export default function CommunityPage() {
           <Card className="p-8 mb-8">
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold text-navy-900 mb-4">Why Join Our Community?</h2>
-              <p className="text-lg text-navy-700 max-w-3xl mx-auto">
+              <p className="text-lg text-navy-700 max-w-3xl mx-auto mb-6">
                 Our community is a place where aviation professionals come together to network, 
                 share opportunities, and support each other's growth. Whether you're looking for 
                 job leads, interview tips, study groups, or just want to connect with like-minded 
                 individuals, you'll find it here.
               </p>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
+                <div className="bg-sky-blue-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-navy-900 mb-2">Forums & Discussions</h3>
+                  <p className="text-sm text-navy-700">Engage in meaningful conversations, ask questions, and share your aviation knowledge with peers.</p>
+                </div>
+                <div className="bg-sky-blue-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-navy-900 mb-2">Networking</h3>
+                  <p className="text-sm text-navy-700">Connect with pilots, cabin crew, ATC professionals, and mechanics from around the world.</p>
+                </div>
+                <div className="bg-sky-blue-50 p-4 rounded-lg">
+                  <h3 className="font-semibold text-navy-900 mb-2">Career Support</h3>
+                  <p className="text-sm text-navy-700">Get help with jobs, interviews, training opportunities, and career advancement.</p>
+                </div>
+              </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
@@ -69,10 +83,10 @@ export default function CommunityPage() {
                   <span className="text-2xl">💼</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900 mb-2">Job Leads & Opportunities</h3>
+                  <h3 className="text-lg font-semibold text-navy-900 mb-2">Get Help with Your Next Airline Interview</h3>
                   <p className="text-navy-700">
                     Get access to exclusive job postings, internship opportunities, and career advice 
-                    from industry professionals.
+                    from industry professionals. Learn from those who've successfully navigated airline interviews.
                   </p>
                 </div>
               </div>
@@ -95,10 +109,10 @@ export default function CommunityPage() {
                   <span className="text-2xl">📚</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900 mb-2">Study Groups</h3>
+                  <h3 className="text-lg font-semibold text-navy-900 mb-2">Share Study Notes, Simulator Tips, and Experiences</h3>
                   <p className="text-navy-700">
-                    Form study groups for ATPL, IFR, and other exams. Share resources and study 
-                    together with peers.
+                    Form study groups for ATPL, IFR, and other exams. Share resources, simulator tips, 
+                    study notes, and real-world experiences with peers.
                   </p>
                 </div>
               </div>
@@ -108,10 +122,10 @@ export default function CommunityPage() {
                   <span className="text-2xl">🤝</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900 mb-2">Networking</h3>
+                  <h3 className="text-lg font-semibold text-navy-900 mb-2">Connect with Aviators Worldwide</h3>
                   <p className="text-navy-700">
                     Connect with pilots, cabin crew, ATC professionals, and instructors from around 
-                    the world. Build your professional network.
+                    the world. Build your professional network and share experiences.
                   </p>
                 </div>
               </div>

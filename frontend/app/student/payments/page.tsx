@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -16,9 +17,22 @@ interface Transaction {
   createdAt: string;
   bookingId?: string;
   description?: string;
+  booking?: {
+    id: string;
+    lessonType?: string;
+    scheduledAt: string;
+    tutor?: {
+      user?: {
+        firstName: string;
+        lastName: string;
+      };
+    };
+  };
+  classEnrollmentId?: string;
 }
 
 export default function StudentPaymentsPage() {
+  const router = useRouter();
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -149,41 +163,66 @@ export default function StudentPaymentsPage() {
               </div>
             ) : (
               <div className="space-y-4">
-                {paymentTransactions.map((transaction) => (
-                  <div key={transaction.id} className="border-b border-gray-200 pb-4 last:border-0">
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <p className="font-medium text-navy-900">
-                          {transaction.description || 'Lesson Payment'}
-                        </p>
-                        <p className="text-sm text-navy-600">
-                          {format(parseISO(transaction.createdAt), 'MMM d, yyyy h:mm a')}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-navy-900">
-                          ${Number(transaction.amount).toFixed(2)}
-                        </p>
-                        <Badge variant={getStatusBadgeVariant(transaction.status)} className="mt-1">
-                          {transaction.status}
-                        </Badge>
-                        {transaction.status === 'pending' && (
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            className="mt-2"
-                            onClick={() => {
-                              // Navigate to checkout/payment page
-                              alert('Redirecting to payment checkout...');
-                            }}
-                          >
-                            Complete Payment
-                          </Button>
-                        )}
+                {paymentTransactions.map((transaction) => {
+                  const instructorName = transaction.booking?.tutor?.user
+                    ? `${transaction.booking.tutor.user.firstName} ${transaction.booking.tutor.user.lastName}`
+                    : 'N/A';
+                  const lessonType = transaction.booking?.lessonType || 'Lesson';
+                  const lessonDate = transaction.booking?.scheduledAt
+                    ? format(parseISO(transaction.booking.scheduledAt), 'MMM d, yyyy')
+                    : null;
+
+                  return (
+                    <div key={transaction.id} className="border-b border-gray-200 pb-4 last:border-0">
+                      <div className="flex justify-between items-start">
+                        <div className="flex-1">
+                          <p className="font-medium text-navy-900 mb-1">
+                            {transaction.description || lessonType}
+                          </p>
+                          <div className="space-y-1 text-sm text-navy-600">
+                            {instructorName !== 'N/A' && (
+                              <p>Instructor: {instructorName}</p>
+                            )}
+                            {lessonDate && <p>Date: {lessonDate}</p>}
+                            <p>Payment Date: {format(parseISO(transaction.createdAt), 'MMM d, yyyy h:mm a')}</p>
+                          </div>
+                        </div>
+                        <div className="text-right ml-4">
+                          <p className="font-semibold text-navy-900 text-lg">
+                            ${Number(transaction.amount).toFixed(2)}
+                          </p>
+                          <Badge variant={getStatusBadgeVariant(transaction.status)} className="mt-1">
+                            {transaction.status}
+                          </Badge>
+                          {transaction.status === 'pending' && (
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              className="mt-2"
+                              onClick={() => {
+                                router.push(`/student/payments?complete=${transaction.id}`);
+                              }}
+                            >
+                              Complete Payment
+                            </Button>
+                          )}
+                          {transaction.status === 'failed' && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="mt-2"
+                              onClick={() => {
+                                router.push(`/student/payments?retry=${transaction.id}`);
+                              }}
+                            >
+                              Retry Payment
+                            </Button>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </Card>

@@ -13,11 +13,42 @@ export default function TutorsPage() {
   const [loading, setLoading] = useState(true);
   const [searchLoading, setSearchLoading] = useState(false);
   const [filters, setFilters] = useState({
-    role: '',
+    specialty: '',
+    aircraftType: '',
     minRating: '',
     maxPrice: '',
     search: '',
   });
+
+  const SPECIALTIES = [
+    'IFR',
+    'VFR',
+    'ATPL theory',
+    'CPL theory',
+    'Airline assessment prep',
+    'Airline Interview',
+    'Cabin crew recruitment',
+    'ATC training',
+    'Aircraft systems',
+    'Aviation English',
+    'Simulator training',
+    'MCC/JOC',
+    'Maintenance basics',
+  ];
+
+  const AIRCRAFT_TYPES = [
+    'Boeing 737',
+    'Boeing 777',
+    'Boeing 787',
+    'Airbus A320',
+    'Airbus A330',
+    'Airbus A350',
+    'Q400',
+    'ATR72',
+    'Cessna 172',
+    'Piper',
+    'DA-42',
+  ];
 
   useEffect(() => {
     fetchTutors();
@@ -26,7 +57,7 @@ export default function TutorsPage() {
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      if (filters.search || filters.role || filters.minRating || filters.maxPrice) {
+      if (filters.search || filters.specialty || filters.aircraftType || filters.minRating || filters.maxPrice) {
         performSearch();
       } else {
         fetchTutors();
@@ -41,7 +72,8 @@ export default function TutorsPage() {
       setLoading(true);
       const params = new URLSearchParams();
       if (filters.search) params.append('search', filters.search);
-      if (filters.role) params.append('specialty', filters.role);
+      if (filters.specialty) params.append('specialty', filters.specialty);
+      if (filters.aircraftType) params.append('aircraftType', filters.aircraftType);
       if (filters.minRating) params.append('minRating', filters.minRating);
       if (filters.maxPrice) params.append('maxPrice', filters.maxPrice);
 
@@ -71,7 +103,8 @@ export default function TutorsPage() {
       setSearchLoading(true);
       const params = new URLSearchParams();
       if (filters.search) params.append('search', filters.search);
-      if (filters.role) params.append('specialty', filters.role);
+      if (filters.specialty) params.append('specialty', filters.specialty);
+      if (filters.aircraftType) params.append('aircraftType', filters.aircraftType);
       if (filters.minRating) params.append('minRating', filters.minRating);
       if (filters.maxPrice) params.append('maxPrice', filters.maxPrice);
 
@@ -104,29 +137,45 @@ export default function TutorsPage() {
 
         {/* Filters */}
         <Card className="mb-8 p-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div>
               <label className="block text-sm font-medium text-navy-700 mb-2">Search</label>
               <input
                 type="text"
-                placeholder="Search by name or specialty..."
+                placeholder="Search by name, aircraft type, or specialty..."
                 value={filters.search}
                 onChange={(e) => setFilters({ ...filters, search: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-navy-700 mb-2">Role</label>
+              <label className="block text-sm font-medium text-navy-700 mb-2">Specialty</label>
               <select
-                value={filters.role}
-                onChange={(e) => setFilters({ ...filters, role: e.target.value })}
+                value={filters.specialty}
+                onChange={(e) => setFilters({ ...filters, specialty: e.target.value })}
                 className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none"
               >
-                <option value="">All Roles</option>
-                <option value="pilot">Pilot</option>
-                <option value="cabin crew">Cabin Crew</option>
-                <option value="atc">ATC</option>
-                <option value="engineer">Engineer</option>
+                <option value="">All Specialties</option>
+                {SPECIALTIES.map((spec) => (
+                  <option key={spec} value={spec}>
+                    {spec}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-navy-700 mb-2">Aircraft Type</label>
+              <select
+                value={filters.aircraftType}
+                onChange={(e) => setFilters({ ...filters, aircraftType: e.target.value })}
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none"
+              >
+                <option value="">All Aircraft</option>
+                {AIRCRAFT_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
+                ))}
               </select>
             </div>
             <div>
@@ -154,9 +203,9 @@ export default function TutorsPage() {
               />
             </div>
           </div>
-          {(filters.search || filters.role || filters.minRating || filters.maxPrice) && (
+          {(filters.search || filters.specialty || filters.aircraftType || filters.minRating || filters.maxPrice) && (
             <button
-              onClick={() => setFilters({ role: '', minRating: '', maxPrice: '', search: '' })}
+              onClick={() => setFilters({ specialty: '', aircraftType: '', minRating: '', maxPrice: '', search: '' })}
               className="mt-4 text-sm text-sky-blue-600 hover:text-sky-blue-700 font-medium"
             >
               Clear all filters
@@ -172,7 +221,7 @@ export default function TutorsPage() {
           <Card className="text-center py-12">
             <p className="text-lg text-navy-700 mb-4">No instructors found matching your criteria.</p>
             <p className="text-sm text-navy-600 mb-4">Try adjusting your filters or check back later.</p>
-            <Button variant="outline" onClick={() => setFilters({ role: '', minRating: '', maxPrice: '', search: '' })}>
+            <Button variant="outline" onClick={() => setFilters({ specialty: '', aircraftType: '', minRating: '', maxPrice: '', search: '' })}>
               Clear Filters
             </Button>
           </Card>

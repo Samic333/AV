@@ -244,16 +244,17 @@ export default function HomePage() {
             <div className="text-center lg:text-left">
               <h1 className="text-5xl lg:text-6xl font-bold text-navy-900 mb-6 leading-tight">
                 Master Aviation with
-                <span className="text-sky-blue-600"> Expert Instructors</span>
+                <span className="text-sky-blue-600"> Real Aviation Instructors</span>
               </h1>
               <p className="text-xl text-navy-700 mb-8 leading-relaxed">
-                Connect with verified aviation professionals for personalized training in pilot skills, 
-                cabin crew, ATC, and more. Learn from the best, anywhere in the world.
+                Connect with verified aviation professionals for personalized training. Whether you're a pilot, 
+                cabin crew member, ATC professional, or maintenance engineer, get expert guidance for exam prep, 
+                airline interview coaching, and career advancement. Learn from the best, anywhere in the world.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <Link href="/tutors">
                   <Button variant="primary" size="lg" className="w-full sm:w-auto">
-                    Find an Instructor
+                    Find Instructors
                   </Button>
                 </Link>
                 <Link href="/register/tutor">
@@ -403,16 +404,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Airline Logos Banner */}
-      <section className="py-12 bg-gradient-to-r from-sky-blue-600 to-sky-blue-700">
+      {/* Rolling Airline Strip */}
+      <section className="py-12 bg-gradient-to-r from-sky-blue-600 to-sky-blue-700 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold text-white mb-2">Trusted by Aviation Professionals Worldwide</h2>
-            <p className="text-sky-blue-100">Prepare for interviews with major airlines</p>
+            <p className="text-xl font-semibold text-white mb-6">
+              Pass your airline interview with real airline professionals
+            </p>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-8 opacity-90">
-            {['Ethiopian Airlines', 'Emirates', 'Qatar Airways', 'Etihad Airways', 'Turkish Airlines', 'Lufthansa'].map((airline) => (
-              <div key={airline} className="text-white font-semibold text-lg">
+            {['Ethiopian Airlines', 'Emirates', 'Qatar Airways', 'Etihad Airways', 'Turkish Airlines', 'Lufthansa', 'British Airways', 'Air France', 'KLM', 'Singapore Airlines'].map((airline) => (
+              <div key={airline} className="text-white font-semibold text-lg whitespace-nowrap">
                 {airline}
               </div>
             ))}

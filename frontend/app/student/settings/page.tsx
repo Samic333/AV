@@ -13,6 +13,9 @@ export default function StudentSettingsPage() {
     textSize: 'normal',
     emailNotifications: true,
     inAppNotifications: true,
+    notifyNewMessage: true,
+    notifyLessonReminder: true,
+    notifyPaymentIssues: true,
   });
 
   useEffect(() => {
@@ -30,6 +33,9 @@ export default function StudentSettingsPage() {
           textSize: data.textSize || 'normal',
           emailNotifications: data.emailNotifications !== false,
           inAppNotifications: data.inAppNotifications !== false,
+          notifyNewMessage: data.notifyNewMessage !== false,
+          notifyLessonReminder: data.notifyLessonReminder !== false,
+          notifyPaymentIssues: data.notifyPaymentIssues !== false,
         });
       }
     } catch (error) {
@@ -39,11 +45,40 @@ export default function StudentSettingsPage() {
     }
   };
 
+  const applyTheme = (theme: string) => {
+    // Apply theme variation - for now just store, could add CSS classes later
+    document.documentElement.setAttribute('data-theme', theme);
+  };
+
+  const applyTextSize = (size: string) => {
+    // Apply text size to dashboard
+    const root = document.documentElement;
+    root.style.setProperty('--text-size', 
+      size === 'small' ? '0.875rem' : 
+      size === 'large' ? '1.125rem' : 
+      '1rem'
+    );
+    // Also apply to body for dashboard pages
+    if (window.location.pathname.includes('/student/') || window.location.pathname.includes('/tutor/')) {
+      document.body.className = document.body.className.replace(/text-size-\w+/g, '');
+      document.body.classList.add(`text-size-${size}`);
+    }
+  };
+
+  useEffect(() => {
+    // Apply settings on load
+    if (settings.theme) applyTheme(settings.theme);
+    if (settings.textSize) applyTextSize(settings.textSize);
+  }, []);
+
   const handleSave = async () => {
     try {
       setSaving(true);
       await api.put('/users/settings', settings);
       alert('Settings saved successfully!');
+      // Re-apply settings
+      applyTheme(settings.theme);
+      applyTextSize(settings.textSize);
     } catch (error: any) {
       alert(error.response?.data?.message || 'Failed to save settings');
     } finally {
@@ -77,27 +112,37 @@ export default function StudentSettingsPage() {
             <h2 className="text-xl font-semibold text-navy-900 mb-6">UI Preferences</h2>
             <div className="space-y-6">
               <div>
-                <label className="block text-sm font-semibold text-navy-700 mb-2">Theme</label>
+                <label className="block text-sm font-semibold text-navy-700 mb-2">Theme Variation</label>
                 <select
                   value={settings.theme}
-                  onChange={(e) => setSettings({ ...settings, theme: e.target.value })}
+                  onChange={(e) => {
+                    setSettings({ ...settings, theme: e.target.value });
+                    applyTheme(e.target.value);
+                  }}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
                 >
-                  <option value="light">Light</option>
-                  <option value="dark">Dark</option>
+                  <option value="light">Light (Default)</option>
+                  <option value="light-blue">Light Blue Accent</option>
+                  <option value="light-cloud">Cloud Theme</option>
                 </select>
+                <p className="text-xs text-gray-500 mt-1">Choose a theme variation within the existing color palette</p>
               </div>
 
               <div>
                 <label className="block text-sm font-semibold text-navy-700 mb-2">Text Size</label>
                 <select
                   value={settings.textSize}
-                  onChange={(e) => setSettings({ ...settings, textSize: e.target.value })}
+                  onChange={(e) => {
+                    setSettings({ ...settings, textSize: e.target.value });
+                    applyTextSize(e.target.value);
+                  }}
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
                 >
+                  <option value="small">Small</option>
                   <option value="normal">Normal</option>
                   <option value="large">Large</option>
                 </select>
+                <p className="text-xs text-gray-500 mt-1">This will apply to your dashboard interface</p>
               </div>
             </div>
           </Card>
@@ -130,6 +175,50 @@ export default function StudentSettingsPage() {
                   onChange={(e) => setSettings({ ...settings, inAppNotifications: e.target.checked })}
                   className="w-4 h-4 text-sky-blue-600 border-gray-300 rounded focus:ring-sky-blue-500"
                 />
+              </div>
+
+              <div className="border-t border-gray-200 pt-4 mt-4">
+                <p className="text-sm font-semibold text-navy-700 mb-3">Notification Types</p>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className="text-sm font-medium text-navy-700">New Message</label>
+                      <p className="text-xs text-navy-600">Get notified when you receive a new message</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settings.notifyNewMessage}
+                      onChange={(e) => setSettings({ ...settings, notifyNewMessage: e.target.checked })}
+                      className="w-4 h-4 text-sky-blue-600 border-gray-300 rounded focus:ring-sky-blue-500"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className="text-sm font-medium text-navy-700">Upcoming Lesson Reminder</label>
+                      <p className="text-xs text-navy-600">Get reminders before your scheduled lessons</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settings.notifyLessonReminder}
+                      onChange={(e) => setSettings({ ...settings, notifyLessonReminder: e.target.checked })}
+                      className="w-4 h-4 text-sky-blue-600 border-gray-300 rounded focus:ring-sky-blue-500"
+                    />
+                  </div>
+
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <label className="text-sm font-medium text-navy-700">Payment Issues</label>
+                      <p className="text-xs text-navy-600">Get notified about pending or failed payments</p>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={settings.notifyPaymentIssues}
+                      onChange={(e) => setSettings({ ...settings, notifyPaymentIssues: e.target.checked })}
+                      className="w-4 h-4 text-sky-blue-600 border-gray-300 rounded focus:ring-sky-blue-500"
+                    />
+                  </div>
+                </div>
               </div>
             </div>
           </Card>

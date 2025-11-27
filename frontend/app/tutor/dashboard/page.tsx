@@ -111,7 +111,7 @@ export default function TutorDashboard() {
           <h1 className="text-3xl font-bold text-navy-900 mb-1">
             {getGreeting()}, {firstName}
           </h1>
-          <p className="text-navy-600">Welcome back, Instructor</p>
+          <p className="text-gray-500 text-sm">Welcome back, Instructor</p>
         </div>
 
         {/* Profile Completion CTA */}

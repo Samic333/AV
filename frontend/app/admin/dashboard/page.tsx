@@ -148,16 +148,31 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
-        {/* User Distribution */}
+        {/* User Distribution by Country */}
         {stats?.usersByCountry && stats.usersByCountry.length > 0 && (
           <Card className="mb-8">
             <h2 className="text-xl font-semibold text-navy-900 mb-4">User Distribution by Country</h2>
-            <div className="flex flex-wrap gap-2">
-              {stats.usersByCountry.map((item: any) => (
-                <Badge key={item.country} variant="info">
-                  {item.country}: {item.count}
-                </Badge>
-              ))}
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-4 font-semibold text-navy-900">Country</th>
+                    <th className="text-left py-3 px-4 font-semibold text-navy-900">Total Users</th>
+                    <th className="text-left py-3 px-4 font-semibold text-navy-900">Students</th>
+                    <th className="text-left py-3 px-4 font-semibold text-navy-900">Instructors</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stats.usersByCountry.map((item: any) => (
+                    <tr key={item.country} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4 font-medium text-navy-900">{item.country}</td>
+                      <td className="py-3 px-4 text-navy-600">{item.count}</td>
+                      <td className="py-3 px-4 text-navy-600">{item.students || 'N/A'}</td>
+                      <td className="py-3 px-4 text-navy-600">{item.instructors || 'N/A'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </Card>
         )}

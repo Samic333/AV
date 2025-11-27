@@ -69,7 +69,7 @@ export default function HowItWorksPage() {
               </li>
             </ul>
             <Link href="/register/student">
-              <Button variant="primary" className="w-full bg-sky-blue-600 text-white hover:bg-sky-blue-700 border-0">
+              <Button variant="primary" className="w-full bg-white text-sky-blue-600 hover:bg-sky-blue-50 border-2 border-white font-semibold shadow-lg">
                 Join as Student
               </Button>
             </Link>
@@ -96,7 +96,7 @@ export default function HowItWorksPage() {
               </li>
             </ul>
             <Link href="/register/tutor">
-              <Button variant="outline" className="w-full bg-white text-sky-blue-600 border-2 border-sky-blue-600 hover:bg-sky-blue-50">
+              <Button variant="outline" className="w-full bg-white text-sky-blue-600 border-2 border-white hover:bg-sky-blue-50 font-semibold shadow-lg">
                 Become an Instructor
               </Button>
             </Link>

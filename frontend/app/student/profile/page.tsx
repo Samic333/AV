@@ -13,6 +13,7 @@ const studentProfileSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   phone: z.string().optional(),
+  backupPhone: z.string().optional(),
   secondaryEmail: z.string().email().optional().or(z.literal('')),
   timezone: z.string().min(1, 'Timezone is required'),
   country: z.string().optional(),
@@ -21,14 +22,16 @@ const studentProfileSchema = z.object({
   yearsOfAviationExperience: z.number().min(0).max(40).optional(),
   learningGoals: z.string().optional(),
   preferredLanguages: z.array(z.string()).optional(),
+  otherLanguage: z.string().optional(),
   preferredAircraftTypes: z.array(z.string()).optional(),
+  otherAircraftType: z.string().optional(),
   currentRole: z.string().optional(),
   currentCompany: z.string().optional(),
 });
 
 type StudentProfileForm = z.infer<typeof studentProfileSchema>;
 
-const COMMON_LANGUAGES = ['English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 'Arabic', 'Chinese', 'Japanese', 'Russian', 'Hindi', 'Korean'];
+const COMMON_LANGUAGES = ['English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 'Arabic', 'Chinese', 'Japanese', 'Russian', 'Hindi', 'Korean', 'Other'];
 const AIRCRAFT_TYPES = ['Q400', 'A320', 'B737', 'B787', 'ATR72', 'A330', 'A350', 'B777', 'Cessna 172', 'Piper', 'DA-42', 'Other'];
 const COUNTRIES = [
   'USA', 'UK', 'Canada', 'Australia', 'Germany', 'France', 'Spain', 'Italy', 'Netherlands', 'Belgium',
@@ -74,6 +77,7 @@ export default function StudentProfilePage() {
       firstName: user?.firstName || '',
       lastName: user?.lastName || '',
       phone: user?.phone || '',
+      backupPhone: '',
       timezone: user?.timezone || 'UTC',
       country: '',
       address: '',
@@ -82,7 +86,9 @@ export default function StudentProfilePage() {
       yearsOfAviationExperience: 0,
       learningGoals: '',
       preferredLanguages: [],
+      otherLanguage: '',
       preferredAircraftTypes: [],
+      otherAircraftType: '',
       currentRole: '',
       currentCompany: '',
     },
@@ -145,19 +151,33 @@ export default function StudentProfilePage() {
         firstName: data.firstName,
         lastName: data.lastName,
         phone: data.phone,
+        backupPhone: data.backupPhone || null,
         timezone: data.timezone,
         country: data.country,
         address: data.address,
         secondaryEmail: data.secondaryEmail || null,
       });
 
+      // Handle "Other" options - add to arrays if specified
+      let finalLanguages = [...(data.preferredLanguages || [])];
+      if (data.otherLanguage && finalLanguages.includes('Other')) {
+        finalLanguages = finalLanguages.filter(l => l !== 'Other');
+        finalLanguages.push(data.otherLanguage);
+      }
+      
+      let finalAircraftTypes = [...(data.preferredAircraftTypes || [])];
+      if (data.otherAircraftType && finalAircraftTypes.includes('Other')) {
+        finalAircraftTypes = finalAircraftTypes.filter(a => a !== 'Other');
+        finalAircraftTypes.push(data.otherAircraftType);
+      }
+
       // Update student profile
       try {
         await api.put('/students/profile', {
           yearsOfAviationExperience: data.yearsOfAviationExperience,
           learningGoals: data.learningGoals,
-          preferredLanguages: data.preferredLanguages,
-          preferredAircraftTypes: data.preferredAircraftTypes,
+          preferredLanguages: finalLanguages,
+          preferredAircraftTypes: finalAircraftTypes,
           currentRole: data.currentRole,
           currentCompany: data.currentCompany,
           city: data.city,
@@ -266,13 +286,22 @@ export default function StudentProfilePage() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold text-gray-700 mb-2">Secondary Email</label>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Backup Phone</label>
                     <input
-                      type="email"
-                      {...register('secondaryEmail')}
+                      type="tel"
+                      {...register('backupPhone')}
                       className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
+                      placeholder="Optional backup contact"
                     />
                   </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Secondary Email</label>
+                  <input
+                    type="email"
+                    {...register('secondaryEmail')}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
+                  />
                 </div>
 
                 <div>
@@ -393,7 +422,7 @@ export default function StudentProfilePage() {
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Preferred Languages
                   </label>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {COMMON_LANGUAGES.map((lang) => (
                       <button
                         key={lang}
@@ -409,13 +438,21 @@ export default function StudentProfilePage() {
                       </button>
                     ))}
                   </div>
+                  {preferredLanguages.includes('Other') && (
+                    <input
+                      type="text"
+                      {...register('otherLanguage')}
+                      placeholder="Specify other language"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none mt-2"
+                    />
+                  )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Preferred Aircraft Types
                   </label>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 mb-3">
                     {AIRCRAFT_TYPES.map((type) => (
                       <button
                         key={type}
@@ -431,6 +468,14 @@ export default function StudentProfilePage() {
                       </button>
                     ))}
                   </div>
+                  {preferredAircraftTypes.includes('Other') && (
+                    <input
+                      type="text"
+                      {...register('otherAircraftType')}
+                      placeholder="Specify other aircraft type"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none mt-2"
+                    />
+                  )}
                   <p className="text-xs text-gray-500 mt-2">
                     Select aircraft types you're interested in learning about
                   </p>

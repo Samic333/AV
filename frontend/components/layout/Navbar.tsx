@@ -20,7 +20,7 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { href: '/tutors', label: 'Find Instructor' },
+    { href: '/tutors', label: 'Find Instructors' },
     { href: '/group-classes', label: 'Group Classes' },
     { href: '/community', label: 'Community' },
     { href: '/how-it-works', label: 'How it works' },

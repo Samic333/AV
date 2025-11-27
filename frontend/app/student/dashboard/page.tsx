@@ -17,6 +17,9 @@ export default function StudentDashboard() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [profileComplete, setProfileComplete] = useState(true);
+  const [studentProfile, setStudentProfile] = useState<any>(null);
+  const [pendingPayments, setPendingPayments] = useState<any[]>([]);
+  const [failedPayments, setFailedPayments] = useState<any[]>([]);
   const [stats, setStats] = useState({
     upcomingLessons: 0,
     totalHours: 0,
@@ -34,7 +37,55 @@ export default function StudentDashboard() {
 
   useEffect(() => {
     fetchBookings();
+    checkProfileCompletion();
+    fetchPaymentNotifications();
   }, []);
+
+  const fetchPaymentNotifications = async () => {
+    try {
+      const response = await api.get('/payments/history');
+      const data = response.data.data || response.data;
+      const transactionsList = Array.isArray(data) ? data : [];
+      const payments = transactionsList.filter((t: any) => t.type === 'payment');
+      setPendingPayments(payments.filter((t: any) => t.status === 'pending'));
+      setFailedPayments(payments.filter((t: any) => t.status === 'failed'));
+    } catch (error) {
+      console.error('Failed to fetch payment notifications:', error);
+    }
+  };
+
+  const checkProfileCompletion = async () => {
+    try {
+      const response = await api.get('/users/me');
+      const userData = response.data.data || response.data;
+      
+      // Try to fetch student profile
+      try {
+        const profileResponse = await api.get('/students/profile');
+        const profileData = profileResponse.data.data || profileResponse.data;
+        setStudentProfile(profileData);
+        
+        // Check if profile is complete
+        const complete = !!(
+          userData.firstName &&
+          userData.lastName &&
+          userData.timezone &&
+          profileData?.yearsOfAviationExperience !== undefined
+        );
+        setProfileComplete(complete);
+      } catch (error) {
+        // Profile might not exist yet
+        const complete = !!(
+          userData.firstName &&
+          userData.lastName &&
+          userData.timezone
+        );
+        setProfileComplete(complete);
+      }
+    } catch (error) {
+      console.error('Failed to check profile completion:', error);
+    }
+  };
 
   const fetchBookings = async () => {
     try {
@@ -91,6 +142,7 @@ export default function StudentDashboard() {
 
   const nextLesson = getNextUpcomingLesson();
 
+
   return (
     <div className="min-h-screen bg-sky-blue-50">
       <div className="max-w-7xl mx-auto p-8">
@@ -98,8 +150,51 @@ export default function StudentDashboard() {
           <h1 className="text-3xl font-bold text-navy-900 mb-1">
             {getGreeting()}, {firstName}
           </h1>
-          <p className="text-navy-600">Welcome back, Student</p>
+          <p className="text-gray-500 text-sm">Welcome back, Student</p>
         </div>
+
+        {/* Profile Completion Prompt */}
+        {!profileComplete && (
+          <Card className="mb-8 bg-yellow-50 border-yellow-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-navy-900 mb-1">Complete Your Profile</h3>
+                <p className="text-navy-700 text-sm">
+                  Complete your profile to get better matches with instructors and unlock all features.
+                </p>
+              </div>
+              <Link href="/student/profile">
+                <Button variant="primary">Finish Profile</Button>
+              </Link>
+            </div>
+          </Card>
+        )}
+
+        {/* Payment Notifications */}
+        {(pendingPayments.length > 0 || failedPayments.length > 0) && (
+          <Card className="mb-8 bg-red-50 border-red-200">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
+                  <span className="text-xl">💳</span>
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-navy-900 mb-1">
+                    Payment {pendingPayments.length > 0 ? 'Pending' : 'Failed'}
+                  </h3>
+                  <p className="text-navy-700 text-sm">
+                    {pendingPayments.length > 0 && `${pendingPayments.length} payment${pendingPayments.length > 1 ? 's' : ''} waiting to be completed. `}
+                    {failedPayments.length > 0 && `${failedPayments.length} payment${failedPayments.length > 1 ? 's' : ''} failed. `}
+                    Click to resolve.
+                  </p>
+                </div>
+              </div>
+              <Link href="/student/payments">
+                <Button variant="primary">View Payments</Button>
+              </Link>
+            </div>
+          </Card>
+        )}
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
