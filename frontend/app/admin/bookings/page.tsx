@@ -1,57 +1,22 @@
-'use client';
-
-import Card from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
-import Badge from '@/components/ui/Badge';
+"use client";
 
 export default function AdminBookingsPage() {
   return (
     <div className="p-8">
       <div className="max-w-7xl mx-auto">
-            <div className="mb-8">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">All Bookings</h1>
-              <p className="text-gray-600">View and manage all lesson bookings</p>
-            </div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">All Bookings</h1>
+          <p className="text-gray-600">
+            Review and manage all student bookings on the platform.
+          </p>
+        </div>
 
-            <div className="mb-6 flex gap-4">
-              <Button variant="outline" className="bg-white">All</Button>
-              <Button variant="outline">Pending</Button>
-              <Button variant="outline">Confirmed</Button>
-              <Button variant="outline">Completed</Button>
-              <Button variant="outline">Cancelled</Button>
-            </div>
-
-            <div className="space-y-4">
-              {/* Placeholder for bookings */}
-              <Card>
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-1">IFR Training Session</h3>
-                    <p className="text-gray-600 text-sm mb-2">
-                      Student: Jane Smith | Tutor: John Doe
-                    </p>
-                    <div className="flex items-center gap-4 text-sm text-gray-600">
-                      <span>📅 Dec 25, 2024 at 2:00 PM</span>
-                      <span>⏱️ 60 minutes</span>
-                      <span>💰 $75</span>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <Badge variant="success">Confirmed</Badge>
-                    <Button variant="outline" size="sm">View Details</Button>
-                  </div>
-                </div>
-              </Card>
-
-              <Card className="text-center py-12">
-                <p className="text-lg text-gray-600 mb-2">No bookings found</p>
-                <p className="text-sm text-gray-500">All bookings will appear here</p>
-              </Card>
-            </div>
+        <div className="bg-white rounded-lg shadow-sm border p-4">
+          <p className="text-sm text-gray-500">
+            Bookings table and filters will go here. For now, this is just a placeholder to keep the app building.
+          </p>
         </div>
       </div>
     </div>
   );
 }
-
-

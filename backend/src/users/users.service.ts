@@ -87,7 +87,7 @@ export class UsersService {
       create: {
         userId,
         theme: data.theme || 'light',
-        textSize: data.textSize || 'normal',
+        textSize: data.textSize || 'medium',
         emailNotifications: data.emailNotifications !== false,
         inAppNotifications: data.inAppNotifications !== false,
       },
