@@ -3,7 +3,7 @@
 ## ✅ Files Created/Updated
 
 ### Configuration Files
-- ✅ `.do/app.yaml` - DigitalOcean App Platform configuration
+- ✅ `.do/app.yaml` - DigitalOcean App Platform configuration (Optimized for auto-deploy)
 - ✅ `.do/app.yaml.template` - Template with placeholders
 - ✅ `.do/README.md` - Configuration documentation
 - ✅ `.do/QUICK_DEPLOY.md` - Quick deployment checklist
@@ -20,15 +20,10 @@
 
 ## 🚀 Next Steps
 
-1. **Update `.do/app.yaml`** with your actual values:
-   ```yaml
-   # Replace these:
-   - YOUR_GITHUB_USERNAME/YOUR_REPO_NAME
-   - YOUR_JWT_SECRET_HERE
-   - YOUR_JWT_REFRESH_SECRET_HERE
-   - YOUR_FRONTEND_DOMAIN.com
-   - YOUR_BACKEND_DOMAIN.com
-   ```
+1. **Review `.do/app.yaml`**:
+   - It is pre-configured to work out of the box for most settings.
+   - `NEXT_PUBLIC_API_URL` is set to `/api` (relative), so you don't need to configure domains immediately for the app to work.
+   - **Important**: You should set `JWT_SECRET` and `JWT_REFRESH_SECRET` in the DigitalOcean dashboard (or update `app.yaml` with placeholders, but dashboard is safer).
 
 2. **Generate JWT Secrets:**
    ```bash
@@ -39,7 +34,7 @@
 3. **Commit and Push:**
    ```bash
    git add .
-   git commit -m "Add DigitalOcean App Platform deployment configuration"
+   git commit -m "Update DigitalOcean App Platform deployment configuration"
    git push origin main
    ```
 
@@ -49,38 +44,44 @@
    - Connect your GitHub repository
    - DigitalOcean will auto-detect `.do/app.yaml`
 
-5. **Configure Environment Variables** (if not set in app.yaml):
-   - Set JWT secrets as SECRET type in DigitalOcean dashboard
-   - Verify DATABASE_URL is automatically connected
+5. **Configure Environment Variables**:
+   - Set JWT secrets as SECRET type in DigitalOcean dashboard.
+   - Verify DATABASE_URL is automatically connected.
 
 6. **After First Deployment:**
-   - Verify health checks pass
-   - Check database migrations ran
-   - Test authentication
-   - Configure custom domains
+   - Verify health checks pass.
+   - Check database migrations ran (via the `migrate` job).
+   - Test authentication.
+   - Configure custom domains (optional).
 
 ## 📋 Key Features
 
-- **Automatic Deployments**: Pushes to main branch trigger automatic deployments
-- **Database Migrations**: Run automatically during build
-- **Health Checks**: Configured for both services
-- **Managed Database**: PostgreSQL 15 with automatic backups
-- **Environment Variables**: Configured in app.yaml (can be overridden in dashboard)
-- **CORS**: Dynamically configured based on FRONTEND_URL
+- **Automatic Deployments**: Pushes to main branch trigger automatic deployments.
+- **Database Migrations**: Run automatically via a **Pre-Deploy Job**.
+- **Health Checks**: Configured for both services.
+- **Managed Database**: PostgreSQL 15 with automatic backups.
+- **Environment Variables**: Configured in app.yaml.
+- **Unified Domain**: Frontend and Backend share the same domain (Backend at `/api`).
 
 ## 🔧 Configuration Details
 
 ### Backend Service
 - **Port**: 3001
 - **Health Check**: `/api/health`
-- **Build**: Includes Prisma generate and migrations
+- **Build**: `npm ci && npm run build`
 - **Start**: `npm run start:prod`
+- **Route**: `/api`
 
 ### Frontend Service
 - **Port**: 3000
 - **Health Check**: `/`
-- **Build**: Standard Next.js build
+- **Build**: `npm ci && npm run build`
 - **Start**: `npm start`
+- **Route**: `/`
+
+### Migration Job
+- **Trigger**: Pre-Deploy
+- **Command**: `npx prisma migrate deploy`
 
 ### Database
 - **Engine**: PostgreSQL 15
@@ -95,20 +96,18 @@
 
 ## ⚠️ Important Notes
 
-1. **Never commit actual secrets** - Use DigitalOcean's SECRET type or set in dashboard
-2. **Migrations must be committed** - They're needed for production deployment
-3. **First deployment** - May take 5-10 minutes for initial setup
-4. **Database** - Will be created automatically by App Platform
-5. **Domains** - Configure after initial deployment succeeds
+1. **Never commit actual secrets** - Use DigitalOcean's SECRET type or set in dashboard.
+2. **Migrations must be committed** - They're needed for production deployment.
+3. **First deployment** - May take 5-10 minutes for initial setup.
+4. **Database** - Will be created automatically by App Platform.
 
 ## 🐛 Troubleshooting
 
 If deployment fails:
-1. Check build logs in App Platform dashboard
-2. Verify all environment variables are set
-3. Ensure GitHub repository is accessible
-4. Check that migrations are committed to repository
-5. Verify Node.js version compatibility
+1. Check build logs in App Platform dashboard.
+2. Verify all environment variables are set.
+3. Ensure GitHub repository is accessible.
+4. Check that migrations are committed to repository.
+5. Verify Node.js version compatibility.
 
 For detailed troubleshooting, see `DEPLOYMENT.md`.
-
