@@ -25,12 +25,30 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
     set({ user, accessToken, refreshToken, isLoading: false });
   },
-  logout: () => {
+  logout: async () => {
     if (typeof window !== 'undefined') {
+      const refreshToken = localStorage.getItem('refreshToken');
+      
+      // Call logout API endpoint if refreshToken exists
+      if (refreshToken) {
+        try {
+          await api.post('/auth/logout', { refreshToken });
+        } catch (error) {
+          // Continue with logout even if API call fails
+          console.error('Logout API call failed:', error);
+        }
+      }
+      
       localStorage.removeItem('accessToken');
       localStorage.removeItem('refreshToken');
     }
+    
     set({ user: null, accessToken: null, refreshToken: null, isLoading: false });
+    
+    // Redirect to home page
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
   },
   initializeAuth: async () => {
     if (typeof window === 'undefined') {
