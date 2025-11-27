@@ -96,17 +96,17 @@ export default function RegisterTutorPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-aviation-sky to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-sky-soft">
       <Navbar />
       <div className="flex-grow flex items-center justify-center p-4 py-12">
         <Card className="max-w-2xl w-full">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-aviation-blue rounded-full mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-sky-blue-600 rounded-full mb-4">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900">Become a Tutor</h2>
+            <h2 className="text-3xl font-bold text-navy-900">Become a Tutor</h2>
             <p className="text-gray-600 mt-2">Share your aviation expertise and help others succeed</p>
           </div>
 
@@ -120,7 +120,7 @@ export default function RegisterTutorPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="firstName" className="block text-sm font-semibold text-navy-700 mb-2">
                   First Name
                 </label>
                 <input
@@ -129,7 +129,7 @@ export default function RegisterTutorPage() {
                   required
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none transition"
                   placeholder="John"
                 />
               </div>
@@ -143,7 +143,7 @@ export default function RegisterTutorPage() {
                   required
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none transition"
                   placeholder="Doe"
                 />
               </div>

@@ -10,11 +10,12 @@ export default function AdminLayout({
 }) {
   return (
     <AuthGuard requiredRole="admin">
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         <TopBar />
         {children}
       </div>
     </AuthGuard>
   );
 }
+
 

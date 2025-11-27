@@ -81,13 +81,13 @@ export default function StudentDashboard() {
   const nextLesson = getNextUpcomingLesson();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-sky-blue-50 flex">
       <DashboardSidebar role="student" />
       <main className="flex-1 p-8">
         <div className="max-w-7xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Student Dashboard</h1>
-            <p className="text-gray-600">Welcome back! Here's an overview of your learning journey.</p>
+            <h1 className="text-3xl font-bold text-navy-900 mb-2">Student Dashboard</h1>
+            <p className="text-navy-600">Welcome back! Here's an overview of your learning journey.</p>
           </div>
 
           {/* Summary Cards */}
@@ -95,12 +95,12 @@ export default function StudentDashboard() {
             <Card>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Upcoming Lessons</p>
-                  <p className="text-3xl font-bold text-gray-900">
+                  <p className="text-sm text-navy-600 mb-1">Upcoming Lessons</p>
+                  <p className="text-3xl font-bold text-navy-900">
                     {isLoading ? '...' : stats.upcomingLessons}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-aviation-sky rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-sky-blue-100 rounded-lg flex items-center justify-center">
                   <span className="text-2xl">📅</span>
                 </div>
               </div>
@@ -108,12 +108,12 @@ export default function StudentDashboard() {
             <Card>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Total Hours Learned</p>
-                  <p className="text-3xl font-bold text-gray-900">
+                  <p className="text-sm text-navy-600 mb-1">Total Hours Learned</p>
+                  <p className="text-3xl font-bold text-navy-900">
                     {isLoading ? '...' : stats.totalHours}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-aviation-sky rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-sky-blue-100 rounded-lg flex items-center justify-center">
                   <span className="text-2xl">✈️</span>
                 </div>
               </div>
@@ -121,12 +121,12 @@ export default function StudentDashboard() {
             <Card>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-gray-600 mb-1">Favorite Tutors</p>
-                  <p className="text-3xl font-bold text-gray-900">
+                  <p className="text-sm text-navy-600 mb-1">Favorite Tutors</p>
+                  <p className="text-3xl font-bold text-navy-900">
                     {isLoading ? '...' : stats.favoriteTutors}
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-aviation-sky rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-sky-blue-100 rounded-lg flex items-center justify-center">
                   <span className="text-2xl">👨‍🏫</span>
                 </div>
               </div>
@@ -136,18 +136,18 @@ export default function StudentDashboard() {
           {/* Next Upcoming Lesson */}
           <div className="mb-8">
             <Card>
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">Next Upcoming Lesson</h2>
+              <h2 className="text-xl font-semibold text-navy-900 mb-4">Next Upcoming Lesson</h2>
               {isLoading ? (
                 <div className="text-center py-8">
-                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-aviation-blue mx-auto"></div>
+                  <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sky-blue-600 mx-auto"></div>
                 </div>
               ) : nextLesson ? (
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-sky-blue-50 rounded-lg">
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    <h3 className="text-lg font-semibold text-navy-900 mb-2">
                       {nextLesson.lessonType || 'Lesson'}
                     </h3>
-                    <div className="space-y-1 text-sm text-gray-600">
+                    <div className="space-y-1 text-sm text-navy-600">
                       <p>
                         📅 {format(parseISO(nextLesson.scheduledAt), 'MMM d, yyyy')} at{' '}
                         {format(parseISO(nextLesson.scheduledAt), 'h:mm a')}
@@ -197,12 +197,12 @@ export default function StudentDashboard() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card hover>
               <div className="flex items-center space-x-4 mb-4">
-                <div className="w-12 h-12 bg-aviation-blue rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-sky-blue-600 rounded-lg flex items-center justify-center">
                   <span className="text-2xl">📅</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">My Bookings</h3>
-                  <p className="text-sm text-gray-600">View and manage your lessons</p>
+                  <h3 className="text-lg font-semibold text-navy-900">My Bookings</h3>
+                  <p className="text-sm text-navy-600">View and manage your lessons</p>
                 </div>
               </div>
               <Link href="/student/bookings">
@@ -212,12 +212,12 @@ export default function StudentDashboard() {
 
             <Card hover>
               <div className="flex items-center space-x-4 mb-4">
-                <div className="w-12 h-12 bg-aviation-amber rounded-lg flex items-center justify-center">
+                <div className="w-12 h-12 bg-sky-blue-600 rounded-lg flex items-center justify-center">
                   <span className="text-2xl">🔍</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Browse Tutors</h3>
-                  <p className="text-sm text-gray-600">Find available aviation tutors</p>
+                  <h3 className="text-lg font-semibold text-navy-900">Browse Tutors</h3>
+                  <p className="text-sm text-navy-600">Find available aviation tutors</p>
                 </div>
               </div>
               <Link href="/tutors">
@@ -231,8 +231,8 @@ export default function StudentDashboard() {
                   <span className="text-2xl">💬</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Messages</h3>
-                  <p className="text-sm text-gray-600">Chat with your tutors</p>
+                  <h3 className="text-lg font-semibold text-navy-900">Messages</h3>
+                  <p className="text-sm text-navy-600">Chat with your tutors</p>
                 </div>
               </div>
               <Link href="/student/messages">

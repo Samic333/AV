@@ -83,18 +83,18 @@ export default function RegisterStudentPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-aviation-sky to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-sky-soft">
       <Navbar />
       <div className="flex-grow flex items-center justify-center p-4 py-12">
         <Card className="max-w-md w-full">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-aviation-amber rounded-full mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-sky-blue-600 rounded-full mb-4">
               <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
               </svg>
             </div>
-            <h2 className="text-3xl font-bold text-gray-900">Join as Student</h2>
-            <p className="text-gray-600 mt-2">Start your aviation learning journey</p>
+            <h2 className="text-3xl font-bold text-navy-900">Join as Student</h2>
+            <p className="text-navy-700 mt-2">Start your aviation learning journey</p>
           </div>
 
           <form className="space-y-5" onSubmit={handleSubmit}>
@@ -107,7 +107,7 @@ export default function RegisterStudentPage() {
 
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-semibold text-gray-700 mb-2">
+                <label htmlFor="firstName" className="block text-sm font-semibold text-navy-700 mb-2">
                   First Name
                 </label>
                 <input
@@ -116,7 +116,7 @@ export default function RegisterStudentPage() {
                   required
                   value={formData.firstName}
                   onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none transition"
                   placeholder="John"
                 />
               </div>
@@ -130,7 +130,7 @@ export default function RegisterStudentPage() {
                   required
                   value={formData.lastName}
                   onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none transition"
                   placeholder="Doe"
                 />
               </div>

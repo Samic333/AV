@@ -2,7 +2,6 @@
   "name": "aviatortutor",
   "version": "1.0.0",
   "private": true,
-  
   "scripts": {
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
     "dev:backend": "cd backend && npm run start:dev",
@@ -16,4 +15,3 @@
     "concurrently": "^8.2.2"
   }
 }
-

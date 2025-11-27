@@ -94,12 +94,12 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-br from-aviation-sky to-white">
+    <div className="min-h-screen flex flex-col bg-gradient-sky-soft">
       <Navbar />
       <div className="flex-grow flex items-center justify-center p-4 py-12">
         <Card className="max-w-md w-full">
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-aviation-blue rounded-full mb-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-sky-blue-600 rounded-full mb-4">
               <svg
                 className="w-8 h-8 text-white"
                 fill="none"
@@ -136,7 +136,7 @@ export default function LoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none transition"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none transition"
                 placeholder="you@example.com"
               />
             </div>
@@ -151,7 +151,7 @@ export default function LoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none transition"
+                className="w-full px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none transition"
                 placeholder="Enter your password"
               />
             </div>
@@ -179,11 +179,11 @@ export default function LoginPage() {
           <div className="mt-6 text-center space-y-2">
             <p className="text-sm text-gray-600">
               Don't have an account?{' '}
-              <Link href="/register/student" className="text-aviation-blue hover:text-aviation-light font-semibold">
+              <Link href="/register/student" className="text-sky-blue-600 hover:text-sky-blue-700 font-semibold">
                 Join as Student
               </Link>
               {' or '}
-              <Link href="/register/tutor" className="text-aviation-blue hover:text-aviation-light font-semibold">
+              <Link href="/register/tutor" className="text-sky-blue-600 hover:text-sky-blue-700 font-semibold">
                 Become a Tutor
               </Link>
             </p>

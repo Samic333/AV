@@ -10,11 +10,12 @@ export default function StudentLayout({
 }) {
   return (
     <AuthGuard requiredRole="student">
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-white">
         <TopBar />
         {children}
       </div>
     </AuthGuard>
   );
 }
+
 

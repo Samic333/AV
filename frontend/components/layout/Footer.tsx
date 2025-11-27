@@ -2,14 +2,14 @@ import Link from 'next/link';
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-navy-900 text-gray-300">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center space-x-2 mb-4">
               <svg
-                className="w-8 h-8 text-aviation-amber"
+                className="w-8 h-8 text-sky-blue-400"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -23,7 +23,7 @@ export default function Footer() {
               </svg>
               <span className="text-xl font-bold text-white">AviatorTutor</span>
             </div>
-            <p className="text-sm text-gray-400 max-w-md">
+            <p className="text-sm text-gray-400 max-w-md leading-relaxed">
               Connect with experienced aviation professionals for personalized tutoring in pilot training, 
               cabin crew, ATC, engineering, and more.
             </p>
@@ -32,24 +32,24 @@ export default function Footer() {
           {/* Quick Links */}
           <div>
             <h3 className="text-white font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               <li>
-                <Link href="/about" className="hover:text-aviation-amber transition-colors text-sm">
+                <Link href="/about" className="hover:text-sky-blue-400 transition-colors text-sm">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link href="/how-it-works" className="hover:text-aviation-amber transition-colors text-sm">
+                <Link href="/how-it-works" className="hover:text-sky-blue-400 transition-colors text-sm">
                   How It Works
                 </Link>
               </li>
               <li>
-                <Link href="/pricing" className="hover:text-aviation-amber transition-colors text-sm">
+                <Link href="/pricing" className="hover:text-sky-blue-400 transition-colors text-sm">
                   Pricing
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:text-aviation-amber transition-colors text-sm">
+                <Link href="/contact" className="hover:text-sky-blue-400 transition-colors text-sm">
                   Contact
                 </Link>
               </li>
@@ -59,19 +59,19 @@ export default function Footer() {
           {/* Legal */}
           <div>
             <h3 className="text-white font-semibold mb-4">Legal</h3>
-            <ul className="space-y-2">
+            <ul className="space-y-3">
               <li>
-                <Link href="/terms" className="hover:text-aviation-amber transition-colors text-sm">
+                <Link href="/terms" className="hover:text-sky-blue-400 transition-colors text-sm">
                   Terms of Service
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-aviation-amber transition-colors text-sm">
+                <Link href="/privacy" className="hover:text-sky-blue-400 transition-colors text-sm">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/cookies" className="hover:text-aviation-amber transition-colors text-sm">
+                <Link href="/cookies" className="hover:text-sky-blue-400 transition-colors text-sm">
                   Cookie Policy
                 </Link>
               </li>
@@ -79,11 +79,12 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+        <div className="border-t border-navy-800 mt-12 pt-8 text-center text-sm text-gray-400">
           <p>&copy; {new Date().getFullYear()} AviatorTutor.com. All rights reserved.</p>
         </div>
       </div>
     </footer>
   );
 }
+
 

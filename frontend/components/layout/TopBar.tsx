@@ -56,7 +56,7 @@ export default function TopBar() {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
             <svg
-              className="w-8 h-8 text-aviation-blue"
+              className="w-8 h-8 text-sky-blue-600"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -68,26 +68,26 @@ export default function TopBar() {
                 d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
               />
             </svg>
-            <span className="text-xl font-bold text-aviation-blue">AviatorTutor</span>
+            <span className="text-xl font-bold text-navy-900">AviatorTutor</span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/tutors"
-              className="text-gray-700 hover:text-aviation-blue transition-colors font-medium"
+              className="text-navy-700 hover:text-sky-blue-600 transition-colors font-medium"
             >
               Browse Tutors
             </Link>
             <Link
               href="/group-classes"
-              className="text-gray-700 hover:text-aviation-blue transition-colors font-medium"
+              className="text-navy-700 hover:text-sky-blue-600 transition-colors font-medium"
             >
               Group Classes
             </Link>
             <Link
               href="/how-it-works"
-              className="text-gray-700 hover:text-aviation-blue transition-colors font-medium"
+              className="text-navy-700 hover:text-sky-blue-600 transition-colors font-medium"
             >
               How It Works
             </Link>
@@ -101,7 +101,7 @@ export default function TopBar() {
             <div className="relative" ref={avatarRef}>
               <button
                 onClick={() => setIsAvatarOpen(!isAvatarOpen)}
-                className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-aviation-blue focus:ring-offset-2 rounded-full"
+                className="flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-sky-blue-500 focus:ring-offset-2 rounded-full"
               >
                 {user?.avatarUrl ? (
                   <img
@@ -110,7 +110,7 @@ export default function TopBar() {
                     className="w-8 h-8 rounded-full"
                   />
                 ) : (
-                  <div className="w-8 h-8 rounded-full bg-aviation-blue text-white flex items-center justify-center font-semibold text-sm">
+                  <div className="w-8 h-8 rounded-full bg-sky-blue-600 text-white flex items-center justify-center font-semibold text-sm">
                     {getInitials()}
                   </div>
                 )}
@@ -212,21 +212,21 @@ export default function TopBar() {
             <Link
               href="/tutors"
               onClick={() => setIsMenuOpen(false)}
-              className="block text-gray-700 hover:text-aviation-blue transition-colors"
+              className="block text-navy-700 hover:text-sky-blue-600 transition-colors"
             >
               Browse Tutors
             </Link>
             <Link
               href="/group-classes"
               onClick={() => setIsMenuOpen(false)}
-              className="block text-gray-700 hover:text-aviation-blue transition-colors"
+              className="block text-navy-700 hover:text-sky-blue-600 transition-colors"
             >
               Group Classes
             </Link>
             <Link
               href="/how-it-works"
               onClick={() => setIsMenuOpen(false)}
-              className="block text-gray-700 hover:text-aviation-blue transition-colors"
+              className="block text-navy-700 hover:text-sky-blue-600 transition-colors"
             >
               How It Works
             </Link>
@@ -236,4 +236,5 @@ export default function TopBar() {
     </nav>
   );
 }
+
 

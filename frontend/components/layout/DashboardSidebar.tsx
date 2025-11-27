@@ -55,7 +55,7 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
       <div className="mb-8">
         <div className="flex items-center space-x-2 mb-2">
           <svg
-            className="w-8 h-8 text-aviation-blue"
+            className="w-8 h-8 text-sky-blue-600"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -67,7 +67,7 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
               d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
             />
           </svg>
-          <span className="text-xl font-bold text-aviation-blue">AviatorTutor</span>
+          <span className="text-xl font-bold text-navy-900">AviatorTutor</span>
         </div>
         <p className="text-xs text-gray-500 capitalize">{role} Dashboard</p>
       </div>
@@ -81,8 +81,8 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
               href={item.href}
               className={`flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${
                 isActive
-                  ? 'bg-aviation-blue text-white'
-                  : 'text-gray-700 hover:bg-gray-100'
+                  ? 'bg-sky-blue-600 text-white'
+                  : 'text-navy-700 hover:bg-sky-blue-50'
               }`}
             >
               <span className="text-lg">{item.icon}</span>
@@ -94,4 +94,5 @@ export default function DashboardSidebar({ role }: DashboardSidebarProps) {
     </aside>
   );
 }
+
 

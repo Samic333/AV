@@ -4,11 +4,11 @@ import Badge from '@/components/ui/Badge';
 
 export default function GroupClassesPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Group Classes</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-navy-900 mb-4">Group Classes</h1>
+          <p className="text-xl text-navy-700 max-w-2xl mx-auto">
             Join group learning sessions with other aviation enthusiasts
           </p>
         </div>
@@ -17,9 +17,9 @@ export default function GroupClassesPage() {
           <input
             type="text"
             placeholder="Search classes..."
-            className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+            className="flex-1 px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none"
           />
-          <select className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none">
+          <select className="px-4 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-sky-blue-500 focus:border-sky-blue-500 outline-none">
             <option>All Categories</option>
             <option>IFR Training</option>
             <option>ATPL Theory</option>
@@ -41,12 +41,12 @@ export default function GroupClassesPage() {
             <div className="mt-auto pt-4 border-t border-gray-200">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-sm text-gray-600">Price per student</p>
-                  <p className="text-2xl font-bold text-aviation-blue">$25</p>
+                  <p className="text-sm text-navy-600">Price per student</p>
+                  <p className="text-2xl font-bold text-sky-blue-600">$25</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-600">Max students</p>
-                  <p className="text-lg font-semibold">10</p>
+                  <p className="text-sm text-navy-600">Max students</p>
+                  <p className="text-lg font-semibold text-navy-900">10</p>
                 </div>
               </div>
               <Button variant="primary" className="w-full">View Details</Button>
@@ -56,20 +56,20 @@ export default function GroupClassesPage() {
           <Card hover className="flex flex-col">
             <div className="mb-4">
               <Badge variant="info" className="mb-2">ATPL Theory</Badge>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">ATPL Exam Preparation</h3>
-              <p className="text-gray-600 text-sm mb-4">
+              <h3 className="text-xl font-bold text-navy-900 mb-2">ATPL Exam Preparation</h3>
+              <p className="text-navy-700 text-sm mb-4">
                 Comprehensive ATPL theory preparation covering all subjects.
               </p>
             </div>
             <div className="mt-auto pt-4 border-t border-gray-200">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-sm text-gray-600">Price per student</p>
-                  <p className="text-2xl font-bold text-aviation-blue">$30</p>
+                  <p className="text-sm text-navy-600">Price per student</p>
+                  <p className="text-2xl font-bold text-sky-blue-600">$30</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-600">Max students</p>
-                  <p className="text-lg font-semibold">15</p>
+                  <p className="text-sm text-navy-600">Max students</p>
+                  <p className="text-lg font-semibold text-navy-900">15</p>
                 </div>
               </div>
               <Button variant="primary" className="w-full">View Details</Button>
@@ -79,20 +79,20 @@ export default function GroupClassesPage() {
           <Card hover className="flex flex-col">
             <div className="mb-4">
               <Badge variant="info" className="mb-2">Interview Prep</Badge>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">Airline Interview Masterclass</h3>
-              <p className="text-gray-600 text-sm mb-4">
+              <h3 className="text-xl font-bold text-navy-900 mb-2">Airline Interview Masterclass</h3>
+              <p className="text-navy-700 text-sm mb-4">
                 Prepare for airline interviews with mock sessions and expert guidance.
               </p>
             </div>
             <div className="mt-auto pt-4 border-t border-gray-200">
               <div className="flex items-center justify-between mb-4">
                 <div>
-                  <p className="text-sm text-gray-600">Price per student</p>
-                  <p className="text-2xl font-bold text-aviation-blue">$40</p>
+                  <p className="text-sm text-navy-600">Price per student</p>
+                  <p className="text-2xl font-bold text-sky-blue-600">$40</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-600">Max students</p>
-                  <p className="text-lg font-semibold">8</p>
+                  <p className="text-sm text-navy-600">Max students</p>
+                  <p className="text-lg font-semibold text-navy-900">8</p>
                 </div>
               </div>
               <Button variant="primary" className="w-full">View Details</Button>
@@ -101,14 +101,17 @@ export default function GroupClassesPage() {
         </div>
 
         <div className="mt-12 text-center">
-          <Card className="bg-aviation-sky border-aviation-blue">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Want to teach a group class?</h2>
-            <p className="text-gray-700 mb-6">Share your expertise with multiple students at once</p>
-            <Button variant="secondary">Become a Tutor</Button>
+          <Card className="bg-sky-blue-50 border-sky-blue-200">
+            <h2 className="text-2xl font-bold text-navy-900 mb-4">Want to teach a group class?</h2>
+            <p className="text-navy-700 mb-6">Share your expertise with multiple students at once</p>
+            <Link href="/register/tutor">
+              <Button variant="secondary">Become a Tutor</Button>
+            </Link>
           </Card>
         </div>
       </div>
     </div>
   );
 }
+
 

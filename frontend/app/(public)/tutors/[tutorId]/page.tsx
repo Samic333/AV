@@ -34,18 +34,18 @@ export default function TutorProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-aviation-blue"></div>
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-blue-600"></div>
       </div>
     );
   }
 
   if (!tutor) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center bg-white">
         <Card>
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Tutor Not Found</h2>
-          <p className="text-gray-600 mb-4">The tutor you're looking for doesn't exist.</p>
+          <h2 className="text-2xl font-bold text-navy-900 mb-4">Tutor Not Found</h2>
+          <p className="text-navy-700 mb-4">The tutor you're looking for doesn't exist.</p>
           <Link href="/tutors">
             <Button variant="primary">Browse All Tutors</Button>
           </Link>
@@ -55,34 +55,34 @@ export default function TutorProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-white py-12">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <Card className="mb-8">
           <div className="flex flex-col md:flex-row gap-8">
             <div className="flex-shrink-0">
-              <div className="w-32 h-32 bg-aviation-sky rounded-full flex items-center justify-center text-4xl">
+              <div className="w-32 h-32 bg-sky-blue-100 rounded-full flex items-center justify-center text-4xl font-bold text-sky-blue-700 shadow-soft">
                 {tutor.firstName?.[0]}{tutor.lastName?.[0]}
               </div>
             </div>
             <div className="flex-1">
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              <h1 className="text-3xl font-bold text-navy-900 mb-2">
                 {tutor.firstName} {tutor.lastName}
               </h1>
               {tutor.tutorProfile?.averageRating && (
                 <div className="flex items-center gap-2 mb-4">
                   <span className="text-yellow-500 text-xl">⭐</span>
-                  <span className="text-lg font-semibold">
+                  <span className="text-lg font-semibold text-navy-900">
                     {tutor.tutorProfile.averageRating.toFixed(1)}
                   </span>
-                  <span className="text-gray-600">({tutor.tutorProfile.totalLessonsTaught || 0} lessons)</span>
+                  <span className="text-navy-600">({tutor.tutorProfile.totalLessonsTaught || 0} lessons)</span>
                 </div>
               )}
-              <div className="mb-4">
-                <p className="text-3xl font-bold text-aviation-blue mb-1">
+              <div className="mb-6">
+                <p className="text-3xl font-bold text-sky-blue-600 mb-1">
                   ${tutor.tutorProfile?.hourlyRate || 'N/A'}/hour
                 </p>
               </div>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-3">
                 <Button variant="primary">Book a Lesson</Button>
                 <Button variant="outline">Send Message</Button>
               </div>
@@ -93,53 +93,53 @@ export default function TutorProfilePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="md:col-span-2 space-y-6">
             <Card>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">About</h2>
-              <p className="text-gray-700 whitespace-pre-line">
+              <h2 className="text-2xl font-bold text-navy-900 mb-4">About</h2>
+              <p className="text-navy-700 whitespace-pre-line leading-relaxed">
                 {tutor.tutorProfile?.bio || 'No bio available.'}
               </p>
             </Card>
 
             <Card>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Specialties</h2>
+              <h2 className="text-2xl font-bold text-navy-900 mb-4">Specialties</h2>
               <div className="flex flex-wrap gap-2">
                 {tutor.tutorProfile?.specialties?.length > 0 ? (
                   tutor.tutorProfile.specialties.map((spec: any, idx: number) => (
                     <Badge key={idx} variant="info">{spec.specialty}</Badge>
                   ))
                 ) : (
-                  <p className="text-gray-600">No specialties listed.</p>
+                  <p className="text-navy-600">No specialties listed.</p>
                 )}
               </div>
             </Card>
 
             <Card>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">Reviews</h2>
-              <p className="text-gray-600">No reviews yet.</p>
+              <h2 className="text-2xl font-bold text-navy-900 mb-4">Reviews</h2>
+              <p className="text-navy-600">No reviews yet.</p>
             </Card>
           </div>
 
           <div className="space-y-6">
             <Card>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Quick Stats</h3>
+              <h3 className="text-lg font-bold text-navy-900 mb-4">Quick Stats</h3>
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-gray-600">Total Lessons</p>
-                  <p className="text-2xl font-bold">{tutor.tutorProfile?.totalLessonsTaught || 0}</p>
+                  <p className="text-sm text-navy-600">Total Lessons</p>
+                  <p className="text-2xl font-bold text-navy-900">{tutor.tutorProfile?.totalLessonsTaught || 0}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Total Students</p>
-                  <p className="text-2xl font-bold">{tutor.tutorProfile?.totalStudents || 0}</p>
+                  <p className="text-sm text-navy-600">Total Students</p>
+                  <p className="text-2xl font-bold text-navy-900">{tutor.tutorProfile?.totalStudents || 0}</p>
                 </div>
                 <div>
-                  <p className="text-sm text-gray-600">Response Time</p>
-                  <p className="text-lg font-semibold">Within 24 hours</p>
+                  <p className="text-sm text-navy-600">Response Time</p>
+                  <p className="text-lg font-semibold text-navy-900">Within 24 hours</p>
                 </div>
               </div>
             </Card>
 
             <Card>
-              <h3 className="text-lg font-bold text-gray-900 mb-4">Availability</h3>
-              <p className="text-gray-600 mb-4">Check tutor's calendar for available time slots.</p>
+              <h3 className="text-lg font-bold text-navy-900 mb-4">Availability</h3>
+              <p className="text-navy-600 mb-4">Check tutor's calendar for available time slots.</p>
               <Button variant="outline" className="w-full">View Calendar</Button>
             </Card>
           </div>

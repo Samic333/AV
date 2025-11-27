@@ -5,40 +5,40 @@ import Link from 'next/link';
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-white py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Pricing</h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <h1 className="text-4xl font-bold text-navy-900 mb-4">Pricing</h1>
+          <p className="text-xl text-navy-700 max-w-2xl mx-auto">
             Transparent pricing for students and tutors
           </p>
         </div>
 
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">For Students</h2>
+          <h2 className="text-3xl font-bold text-navy-900 mb-8 text-center">For Students</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card>
+            <Card hover>
               <div className="text-center mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">One-on-One Lessons</h3>
-                <p className="text-gray-600">Pay per lesson with your chosen tutor</p>
+                <h3 className="text-xl font-bold text-navy-900 mb-2">One-on-One Lessons</h3>
+                <p className="text-navy-700">Pay per lesson with your chosen tutor</p>
               </div>
               <div className="mb-6">
                 <div className="text-center mb-4">
-                  <span className="text-4xl font-bold text-aviation-blue">Varies</span>
-                  <p className="text-sm text-gray-600 mt-2">Set by tutor</p>
+                  <span className="text-4xl font-bold text-sky-blue-600">Varies</span>
+                  <p className="text-sm text-navy-600 mt-2">Set by tutor</p>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-sm text-gray-600">Personalized instruction</span>
+                    <span className="text-sm text-navy-700">Personalized instruction</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-sm text-gray-600">Flexible scheduling</span>
+                    <span className="text-sm text-navy-700">Flexible scheduling</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-sm text-gray-600">Direct tutor communication</span>
+                    <span className="text-sm text-navy-700">Direct tutor communication</span>
                   </li>
                 </ul>
               </div>
@@ -47,29 +47,31 @@ export default function PricingPage() {
               </Link>
             </Card>
 
-            <Card className="border-2 border-aviation-blue">
-              <Badge variant="info" className="mb-4">Popular</Badge>
+            <Card hover className="border-2 border-sky-blue-600 relative">
+              <div className="absolute top-4 right-4">
+                <Badge variant="info">Popular</Badge>
+              </div>
               <div className="text-center mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Group Classes</h3>
-                <p className="text-gray-600">Join group sessions at lower cost</p>
+                <h3 className="text-xl font-bold text-navy-900 mb-2">Group Classes</h3>
+                <p className="text-navy-700">Join group sessions at lower cost</p>
               </div>
               <div className="mb-6">
                 <div className="text-center mb-4">
-                  <span className="text-4xl font-bold text-aviation-blue">$25-50</span>
-                  <p className="text-sm text-gray-600 mt-2">Per session</p>
+                  <span className="text-4xl font-bold text-sky-blue-600">$25-50</span>
+                  <p className="text-sm text-navy-600 mt-2">Per session</p>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-sm text-gray-600">Affordable pricing</span>
+                    <span className="text-sm text-navy-700">Affordable pricing</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-sm text-gray-600">Learn with peers</span>
+                    <span className="text-sm text-navy-700">Learn with peers</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-sm text-gray-600">Structured curriculum</span>
+                    <span className="text-sm text-navy-700">Structured curriculum</span>
                   </li>
                 </ul>
               </div>
@@ -78,28 +80,28 @@ export default function PricingPage() {
               </Link>
             </Card>
 
-            <Card>
+            <Card hover>
               <div className="text-center mb-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">Platform Fee</h3>
-                <p className="text-gray-600">Service charge per booking</p>
+                <h3 className="text-xl font-bold text-navy-900 mb-2">Platform Fee</h3>
+                <p className="text-navy-700">Service charge per booking</p>
               </div>
               <div className="mb-6">
                 <div className="text-center mb-4">
-                  <span className="text-4xl font-bold text-aviation-blue">10%</span>
-                  <p className="text-sm text-gray-600 mt-2">Of lesson price</p>
+                  <span className="text-4xl font-bold text-sky-blue-600">10%</span>
+                  <p className="text-sm text-navy-600 mt-2">Of lesson price</p>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-sm text-gray-600">Secure payment processing</span>
+                    <span className="text-sm text-navy-700">Secure payment processing</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-sm text-gray-600">Customer support</span>
+                    <span className="text-sm text-navy-700">Customer support</span>
                   </li>
                   <li className="flex items-start">
                     <span className="text-green-500 mr-2">✓</span>
-                    <span className="text-sm text-gray-600">Platform maintenance</span>
+                    <span className="text-sm text-navy-700">Platform maintenance</span>
                   </li>
                 </ul>
               </div>
@@ -108,28 +110,28 @@ export default function PricingPage() {
         </div>
 
         <div className="mb-16">
-          <h2 className="text-3xl font-bold text-gray-900 mb-8 text-center">For Tutors</h2>
+          <h2 className="text-3xl font-bold text-navy-900 mb-8 text-center">For Tutors</h2>
           <Card className="max-w-2xl mx-auto">
             <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold text-gray-900 mb-2">Earn What You Deserve</h3>
-              <p className="text-gray-600">Set your own rates and keep most of your earnings</p>
+              <h3 className="text-2xl font-bold text-navy-900 mb-2">Earn What You Deserve</h3>
+              <p className="text-navy-700">Set your own rates and keep most of your earnings</p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">You Set Your Rate</h4>
-                <p className="text-sm text-gray-600">Choose your hourly rate based on your experience and expertise</p>
+                <h4 className="font-semibold text-navy-900 mb-2">You Set Your Rate</h4>
+                <p className="text-sm text-navy-700">Choose your hourly rate based on your experience and expertise</p>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Platform Commission</h4>
-                <p className="text-sm text-gray-600">We take 15% to cover payment processing and platform services</p>
+                <h4 className="font-semibold text-navy-900 mb-2">Platform Commission</h4>
+                <p className="text-sm text-navy-700">We take 15% to cover payment processing and platform services</p>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">You Keep 85%</h4>
-                <p className="text-sm text-gray-600">The majority of your earnings go directly to you</p>
+                <h4 className="font-semibold text-navy-900 mb-2">You Keep 85%</h4>
+                <p className="text-sm text-navy-700">The majority of your earnings go directly to you</p>
               </div>
               <div>
-                <h4 className="font-semibold text-gray-900 mb-2">Flexible Payouts</h4>
-                <p className="text-sm text-gray-600">Request payouts whenever you want, processed within 3-5 business days</p>
+                <h4 className="font-semibold text-navy-900 mb-2">Flexible Payouts</h4>
+                <p className="text-sm text-navy-700">Request payouts whenever you want, processed within 3-5 business days</p>
               </div>
             </div>
             <Link href="/register/tutor">
@@ -138,9 +140,9 @@ export default function PricingPage() {
           </Card>
         </div>
 
-        <Card className="bg-aviation-sky text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Have Questions?</h2>
-          <p className="text-gray-700 mb-6">Contact us for more information about our pricing</p>
+        <Card className="bg-sky-blue-50 text-center">
+          <h2 className="text-2xl font-bold text-navy-900 mb-4">Have Questions?</h2>
+          <p className="text-navy-700 mb-6">Contact us for more information about our pricing</p>
           <Link href="/contact">
             <Button variant="outline">Contact Us</Button>
           </Link>
@@ -149,4 +151,5 @@ export default function PricingPage() {
     </div>
   );
 }
+
 
