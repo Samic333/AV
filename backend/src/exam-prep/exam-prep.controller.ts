@@ -25,7 +25,11 @@ export class ExamPrepController {
       preferredSchedule?: string;
     },
   ) {
-    return this.examPrepService.createRequest(user.id, body);
+    const payload = {
+      subject: body.examType,
+      description: body.description,
+    };
+    return this.examPrepService.createRequest(user.id, payload);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -39,7 +43,11 @@ export class ExamPrepController {
       proposedSchedule?: string;
     },
   ) {
-    return this.examPrepService.createBid(user.id, requestId, body);
+    const payload = {
+      amount: body.price,
+      message: body.message,
+    };
+    return this.examPrepService.createBid(user.id, requestId, payload);
   }
 }
 

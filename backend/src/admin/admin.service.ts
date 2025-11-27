@@ -264,7 +264,13 @@ export class AdminService {
 
   async createExpense(data: { description: string; amount: number; category?: string; date: Date; createdBy?: string }) {
     return this.prisma.expense.create({
-      data,
+      data: {
+        description: data.description,
+        amount: data.amount,
+        category: data.category ?? undefined,
+        date: data.date,
+        createdById: data.createdBy ?? null,
+      },
     });
   }
 

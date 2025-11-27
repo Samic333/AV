@@ -37,7 +37,7 @@ export class AuthService {
         studentProfile: {
           create: {
             learningGoals: dto.learningGoals,
-            experienceLevel: dto.experienceLevel,
+            yearsOfAviationExperience: dto.experienceLevel ? Number(dto.experienceLevel) : undefined,
             preferredLanguages: dto.preferredLanguages || [],
           },
         },
