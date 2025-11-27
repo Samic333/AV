@@ -49,6 +49,7 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user.id, user.email, user.role);
 
+    // Return full user object matching frontend User type
     return {
       user: {
         id: user.id,
@@ -56,6 +57,12 @@ export class AuthService {
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
+        avatarUrl: user.avatarUrl,
+        phone: user.phone,
+        timezone: user.timezone,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
       },
       ...tokens,
     };
@@ -95,6 +102,7 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user.id, user.email, user.role);
 
+    // Return full user object matching frontend User type
     return {
       user: {
         id: user.id,
@@ -102,6 +110,12 @@ export class AuthService {
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
+        avatarUrl: user.avatarUrl,
+        phone: user.phone,
+        timezone: user.timezone,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
       },
       ...tokens,
     };
@@ -128,6 +142,7 @@ export class AuthService {
 
     const tokens = await this.generateTokens(user.id, user.email, user.role);
 
+    // Return full user object matching frontend User type
     return {
       user: {
         id: user.id,
@@ -135,6 +150,12 @@ export class AuthService {
         firstName: user.firstName,
         lastName: user.lastName,
         role: user.role,
+        avatarUrl: user.avatarUrl,
+        phone: user.phone,
+        timezone: user.timezone,
+        emailVerified: user.emailVerified,
+        createdAt: user.createdAt.toISOString(),
+        updatedAt: user.updatedAt.toISOString(),
       },
       ...tokens,
     };
@@ -153,7 +174,20 @@ export class AuthService {
       return null;
     }
 
-    return user;
+    // Return user object matching frontend User type
+    return {
+      id: user.id,
+      email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role,
+      avatarUrl: user.avatarUrl,
+      phone: user.phone,
+      timezone: user.timezone,
+      emailVerified: user.emailVerified,
+      createdAt: user.createdAt.toISOString(),
+      updatedAt: user.updatedAt.toISOString(),
+    };
   }
 
   private async generateTokens(userId: string, email: string, role: string) {

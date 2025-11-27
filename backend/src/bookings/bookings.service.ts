@@ -253,6 +253,11 @@ export class BookingsService {
   async cancel(id: string, userId: string, dto: CancelBookingDto) {
     const booking = await this.prisma.booking.findUnique({
       where: { id },
+      include: {
+        tutor: {
+          select: { userId: true },
+        },
+      },
     });
 
     if (!booking) {

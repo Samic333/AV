@@ -103,7 +103,6 @@ model User {
   studentProfile    StudentProfile?
   sessions          UserSession[]
   bookingsAsStudent Booking[]          @relation("StudentBookings")
-  bookingsAsTutor   Booking[]          @relation("TutorBookings")
   sentMessages      Message[]           @relation("MessageSender")
   conversations1    Conversation[]      @relation("Participant1")
   conversations2    Conversation[]      @relation("Participant2")
@@ -154,7 +153,7 @@ model TutorProfile {
   languages      TutorLanguage[]
   availability   TutorAvailability[]
   reviews        TutorReview[]
-  bookings       Booking[]
+  bookings       Booking[]      @relation("TutorBookings")
   classes        GroupClass[]
   wallet         TutorWallet?
   payoutRequests PayoutRequest[]

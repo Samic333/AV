@@ -19,7 +19,7 @@
     "zod": "^3.22.4",
     "@hookform/resolvers": "^3.3.2",
     "axios": "^1.6.2",
-    "date-fns": "^3.0.6",
+   "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "socket.io-client": "^4.6.1",
     "@fullcalendar/react": "^6.1.10",

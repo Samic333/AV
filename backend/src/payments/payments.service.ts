@@ -102,7 +102,7 @@ export class PaymentsService {
       where: { tutorId },
     });
 
-    if (!wallet || wallet.balance < amount) {
+    if (!wallet || wallet.balance.toNumber() < amount) {
       throw new Error('Insufficient balance');
     }
 
