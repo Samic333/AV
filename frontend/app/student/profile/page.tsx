@@ -226,10 +226,10 @@ export default function StudentProfilePage() {
   return (
     <div className="p-8">
       <div className="max-w-4xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile Settings</h1>
-            <p className="text-gray-600">Manage your account information and aviation preferences</p>
-          </div>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile Settings</h1>
+          <p className="text-gray-600">Manage your account information and aviation preferences</p>
+        </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             {/* Basic Info */}

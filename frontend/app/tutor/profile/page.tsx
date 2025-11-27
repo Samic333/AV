@@ -233,21 +233,15 @@ export default function TutorProfilePage() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="p-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sky-blue-600 mx-auto"></div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="p-8">
       <div className="max-w-4xl mx-auto">
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sky-blue-600 mx-auto"></div>
+          </div>
+        ) : (
+          <>
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile & Verification</h1>
             <p className="text-gray-600">Manage your tutor profile and verification status</p>
@@ -293,7 +287,7 @@ export default function TutorProfilePage() {
                     <input
                       type="text"
                       {...register('firstName')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                     />
                     {errors.firstName && (
                       <p className="text-sm text-red-600 mt-1">{errors.firstName.message}</p>
@@ -306,7 +300,7 @@ export default function TutorProfilePage() {
                     <input
                       type="text"
                       {...register('lastName')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                     />
                     {errors.lastName && (
                       <p className="text-sm text-red-600 mt-1">{errors.lastName.message}</p>
@@ -331,7 +325,7 @@ export default function TutorProfilePage() {
                     <input
                       type="tel"
                       {...register('phone')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                     />
                   </div>
                   <div>
@@ -341,7 +335,7 @@ export default function TutorProfilePage() {
                     <input
                       type="text"
                       {...register('timezone')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                     />
                     {errors.timezone && (
                       <p className="text-sm text-red-600 mt-1">{errors.timezone.message}</p>
@@ -354,7 +348,7 @@ export default function TutorProfilePage() {
                   <input
                     type="text"
                     {...register('country')}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                   />
                 </div>
               </div>
@@ -373,7 +367,7 @@ export default function TutorProfilePage() {
                       type="number"
                       {...register('totalFlightHours', { valueAsNumber: true })}
                       min="0"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                     />
                   </div>
                   <div>
@@ -384,7 +378,7 @@ export default function TutorProfilePage() {
                       type="number"
                       {...register('yearsOfExperience', { valueAsNumber: true })}
                       min="0"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                     />
                   </div>
                 </div>
@@ -397,7 +391,7 @@ export default function TutorProfilePage() {
                     type="text"
                     {...register('currentAirlines')}
                     placeholder="e.g., British Airways, Lufthansa..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                   />
                 </div>
 
@@ -409,7 +403,7 @@ export default function TutorProfilePage() {
                     type="text"
                     {...register('previousAirlines')}
                     placeholder="e.g., Emirates, Qatar Airways..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                   />
                 </div>
               </div>
@@ -428,7 +422,7 @@ export default function TutorProfilePage() {
                     {...register('hourlyRate', { valueAsNumber: true })}
                     min="0"
                     step="0.01"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                   />
                   {errors.hourlyRate && (
                     <p className="text-sm text-red-600 mt-1">{errors.hourlyRate.message}</p>
@@ -443,7 +437,7 @@ export default function TutorProfilePage() {
                     {...register('bio')}
                     rows={4}
                     placeholder="Brief introduction about yourself and your teaching style..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                   />
                 </div>
 
@@ -455,7 +449,7 @@ export default function TutorProfilePage() {
                     {...register('aboutMe')}
                     rows={6}
                     placeholder="Tell students about your aviation experience, qualifications, and teaching approach in detail..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-600 focus:border-transparent outline-none"
                   />
                 </div>
 
@@ -651,7 +645,8 @@ export default function TutorProfilePage() {
               </Button>
             </div>
           </form>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
