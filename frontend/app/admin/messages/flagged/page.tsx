@@ -59,7 +59,7 @@ export default function AdminFlaggedMessagesPage() {
                     </h3>
                     <p className="text-sm text-navy-600 mb-1">Email: {message.sender.email}</p>
                     {message.flaggedReason && (
-                      <Badge variant="error" className="mt-2">
+                      <Badge variant="danger" className="mt-2">
                         {message.flaggedReason}
                       </Badge>
                     )}

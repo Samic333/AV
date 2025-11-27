@@ -93,10 +93,10 @@ export default function AdminUserDetailsPage() {
             {user.firstName} {user.lastName}
           </h1>
           <div className="flex items-center gap-2">
-            <Badge variant={user.role === 'admin' ? 'error' : user.role === 'tutor' ? 'info' : 'default'}>
+            <Badge variant={user.role === 'admin' ? 'danger' : user.role === 'tutor' ? 'info' : 'default'}>
               {user.role}
             </Badge>
-            {user.deletedAt && <Badge variant="error">Suspended</Badge>}
+            {user.deletedAt && <Badge variant="danger">Suspended</Badge>}
           </div>
         </div>
 

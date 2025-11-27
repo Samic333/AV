@@ -201,14 +201,14 @@ export default function AdminUsersPage() {
                       </td>
                       <td className="py-3 px-4 text-navy-600">{user.email}</td>
                       <td className="py-3 px-4">
-                        <Badge variant={user.role === 'admin' ? 'error' : user.role === 'tutor' ? 'info' : 'default'}>
+                        <Badge variant={user.role === 'admin' ? 'danger' : user.role === 'tutor' ? 'info' : 'default'}>
                           {user.role}
                         </Badge>
                       </td>
                       <td className="py-3 px-4 text-navy-600">{user.country || 'N/A'}</td>
                       <td className="py-3 px-4">
                         {user.deletedAt ? (
-                          <Badge variant="error">Suspended</Badge>
+                          <Badge variant="danger">Suspended</Badge>
                         ) : (
                           <Badge variant="success">Active</Badge>
                         )}
