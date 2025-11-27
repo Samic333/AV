@@ -41,5 +41,31 @@ export class TutorClassesController {
 
     return this.classesService.create(tutor.id, data);
   }
+
+  @Put(':id')
+  async update(@CurrentUser() user: any, @Param('id') id: string, @Body() data: any) {
+    const tutor = await this.classesService['prisma'].tutorProfile.findUnique({
+      where: { userId: user.id },
+    });
+
+    if (!tutor) {
+      throw new Error('Tutor profile not found');
+    }
+
+    return this.classesService.update(id, tutor.id, data);
+  }
+
+  @Delete(':id')
+  async cancel(@CurrentUser() user: any, @Param('id') id: string) {
+    const tutor = await this.classesService['prisma'].tutorProfile.findUnique({
+      where: { userId: user.id },
+    });
+
+    if (!tutor) {
+      throw new Error('Tutor profile not found');
+    }
+
+    return this.classesService.cancel(id, tutor.id);
+  }
 }
 

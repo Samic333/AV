@@ -47,6 +47,49 @@ export class UsersService {
         phone: data.phone,
         timezone: data.timezone,
         avatarUrl: data.avatarUrl,
+        country: data.country,
+        address: data.address,
+        secondaryEmail: data.secondaryEmail,
+      },
+    });
+  }
+
+  async getSettings(userId: string) {
+    let settings = await this.prisma.userSettings.findUnique({
+      where: { userId },
+    });
+
+    if (!settings) {
+      // Create default settings if they don't exist
+      settings = await this.prisma.userSettings.create({
+        data: {
+          userId,
+          theme: 'light',
+          textSize: 'normal',
+          emailNotifications: true,
+          inAppNotifications: true,
+        },
+      });
+    }
+
+    return settings;
+  }
+
+  async updateSettings(userId: string, data: any) {
+    return this.prisma.userSettings.upsert({
+      where: { userId },
+      update: {
+        theme: data.theme,
+        textSize: data.textSize,
+        emailNotifications: data.emailNotifications,
+        inAppNotifications: data.inAppNotifications,
+      },
+      create: {
+        userId,
+        theme: data.theme || 'light',
+        textSize: data.textSize || 'normal',
+        emailNotifications: data.emailNotifications !== false,
+        inAppNotifications: data.inAppNotifications !== false,
       },
     });
   }

@@ -1,5 +1,6 @@
 'use client';
 
+import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import TopBar from '@/components/layout/TopBar';
 import AuthGuard from '@/components/auth/AuthGuard';
 
@@ -10,9 +11,14 @@ export default function StudentLayout({
 }) {
   return (
     <AuthGuard requiredRole="student">
-      <div className="min-h-screen bg-white">
+      <div className="min-h-screen bg-sky-blue-50 flex flex-col">
         <TopBar />
-        {children}
+        <div className="flex flex-1">
+          <DashboardSidebar role="student" />
+          <main className="flex-1">
+            {children}
+          </main>
+        </div>
       </div>
     </AuthGuard>
   );

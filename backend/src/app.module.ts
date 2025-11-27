@@ -15,6 +15,7 @@ import { ClassesModule } from './classes/classes.module';
 import { AdminModule } from './admin/admin.module';
 import { UploadModule } from './upload/upload.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { ExamPrepModule } from './exam-prep/exam-prep.module';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { RolesGuard } from './common/guards/roles.guard';
 
@@ -41,6 +42,7 @@ import { RolesGuard } from './common/guards/roles.guard';
     AdminModule,
     UploadModule,
     NotificationsModule,
+    ExamPrepModule,
   ],
   controllers: [AppController],
   providers: [

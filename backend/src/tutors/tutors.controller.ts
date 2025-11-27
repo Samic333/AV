@@ -31,4 +31,10 @@ export class TutorsController {
   async getAvailability(@Param('id') id: string) {
     return this.tutorsService.getAvailability(id);
   }
+
+  @Public()
+  @Get('featured/list')
+  async getFeatured() {
+    return this.tutorsService.getFeatured();
+  }
 }

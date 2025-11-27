@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -58,10 +57,8 @@ export default function StudentCalendarPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <DashboardSidebar role="student" />
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto">
+    <div className="p-8">
+      <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Calendar</h1>
             <p className="text-gray-600">View your lessons by date</p>
@@ -128,7 +125,7 @@ export default function StudentCalendarPage() {
             </div>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }

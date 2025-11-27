@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -85,16 +84,34 @@ export default function StudentPaymentsPage() {
   };
 
   const paymentTransactions = transactions.filter((t) => t.type === 'payment');
+  const pendingPayments = paymentTransactions.filter((t) => t.status === 'pending');
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <DashboardSidebar role="student" />
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Payments</h1>
-            <p className="text-gray-600">View your payment history and invoices</p>
-          </div>
+    <div className="min-h-screen bg-sky-blue-50">
+      <div className="max-w-7xl mx-auto p-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-navy-900 mb-2">Payments</h1>
+          <p className="text-navy-600">View your payment history and invoices</p>
+        </div>
+
+        {/* Pending Payments Alert */}
+        {pendingPayments.length > 0 && (
+          <Card className="mb-8 bg-yellow-50 border-yellow-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-navy-900 mb-1">
+                  {pendingPayments.length} Pending Payment{pendingPayments.length > 1 ? 's' : ''}
+                </h3>
+                <p className="text-navy-700 text-sm">
+                  You have {pendingPayments.length} payment{pendingPayments.length > 1 ? 's' : ''} waiting to be completed.
+                </p>
+              </div>
+              <Button variant="primary" onClick={() => window.location.href = '/student/payments#pending'}>
+                Complete Payment
+              </Button>
+            </div>
+          </Card>
+        )}
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Card>
@@ -118,16 +135,16 @@ export default function StudentPaymentsPage() {
           </div>
 
           <Card>
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Payment History</h2>
+            <h2 className="text-xl font-semibold text-navy-900 mb-4">Payment History</h2>
             {isLoading ? (
               <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-aviation-blue mx-auto"></div>
+                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sky-blue-600 mx-auto"></div>
               </div>
             ) : paymentTransactions.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-gray-600 mb-4">No payment history yet</p>
+                <p className="text-navy-600 mb-4">No payment history yet</p>
                 <Link href="/tutors">
-                  <Button variant="outline">Browse Tutors</Button>
+                  <Button variant="outline">Find Instructor</Button>
                 </Link>
               </div>
             ) : (
@@ -136,20 +153,33 @@ export default function StudentPaymentsPage() {
                   <div key={transaction.id} className="border-b border-gray-200 pb-4 last:border-0">
                     <div className="flex justify-between items-center">
                       <div>
-                        <p className="font-medium text-gray-900">
+                        <p className="font-medium text-navy-900">
                           {transaction.description || 'Lesson Payment'}
                         </p>
-                        <p className="text-sm text-gray-600">
-                          {format(parseISO(transaction.createdAt), 'MMM d, yyyy')}
+                        <p className="text-sm text-navy-600">
+                          {format(parseISO(transaction.createdAt), 'MMM d, yyyy h:mm a')}
                         </p>
                       </div>
                       <div className="text-right">
-                        <p className="font-semibold text-gray-900">
+                        <p className="font-semibold text-navy-900">
                           ${Number(transaction.amount).toFixed(2)}
                         </p>
                         <Badge variant={getStatusBadgeVariant(transaction.status)} className="mt-1">
                           {transaction.status}
                         </Badge>
+                        {transaction.status === 'pending' && (
+                          <Button
+                            variant="primary"
+                            size="sm"
+                            className="mt-2"
+                            onClick={() => {
+                              // Navigate to checkout/payment page
+                              alert('Redirecting to payment checkout...');
+                            }}
+                          >
+                            Complete Payment
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -157,8 +187,7 @@ export default function StudentPaymentsPage() {
               </div>
             )}
           </Card>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }

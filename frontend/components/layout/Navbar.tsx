@@ -20,12 +20,11 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/tutors', label: 'Browse Instructors' },
+    { href: '/tutors', label: 'Find Instructor' },
     { href: '/group-classes', label: 'Group Classes' },
-    { href: '/how-it-works', label: 'Community' },
+    { href: '/community', label: 'Community' },
+    { href: '/how-it-works', label: 'How it works' },
     { href: '/pricing', label: 'Pricing' },
-    { href: '/about', label: 'About' },
   ];
 
   const isActive = (href: string) => {

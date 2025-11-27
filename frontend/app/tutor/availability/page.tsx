@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import api from '@/lib/api';
@@ -93,24 +92,19 @@ export default function TutorAvailabilityPage() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex">
-        <DashboardSidebar role="tutor" />
-        <main className="flex-1 p-8">
-          <div className="max-w-7xl mx-auto">
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-aviation-blue mx-auto"></div>
-            </div>
+      <div className="p-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sky-blue-600 mx-auto"></div>
           </div>
-        </main>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <DashboardSidebar role="tutor" />
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto">
+    <div className="p-8">
+      <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Availability</h1>
             <p className="text-gray-600">Set your available time slots for lessons</p>
@@ -184,7 +178,7 @@ export default function TutorAvailabilityPage() {
             </div>
           </Card>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

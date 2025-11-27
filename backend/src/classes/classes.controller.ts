@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Param, Query, UseGuards } from '@nestjs/common';
 import { ClassesService } from './classes.service';
 import { Public } from '../common/decorators/public.decorator';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
@@ -10,8 +10,18 @@ export class ClassesController {
 
   @Public()
   @Get()
-  async findAll() {
-    return this.classesService.findAll();
+  async findAll(@Query() query: any) {
+    return this.classesService.findAll({
+      category: query.category,
+      search: query.search,
+      featured: query.featured === 'true',
+    });
+  }
+
+  @Public()
+  @Get('featured/list')
+  async getFeatured() {
+    return this.classesService.getFeatured();
   }
 
   @Public()

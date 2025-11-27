@@ -53,8 +53,79 @@ const SimulatorSVG = () => (
   </svg>
 );
 
+function FeaturedGroupClasses() {
+  const [classes, setClasses] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchClasses = async () => {
+      try {
+        setLoading(true);
+        // Try featured endpoint first, fallback to regular classes endpoint
+        let response;
+        try {
+          response = await api.get('/classes/featured/list');
+        } catch (e) {
+          // If featured endpoint doesn't exist, try regular classes endpoint
+          response = await api.get('/classes?limit=3');
+        }
+        const data = response.data.data || response.data;
+        const classesList = Array.isArray(data) ? data : (data?.classes || []);
+        // Filter for featured if isFeatured flag exists, otherwise take first 3
+        const featured = classesList.filter((c: any) => c.isFeatured === true).slice(0, 3);
+        setClasses(featured.length > 0 ? featured : classesList.slice(0, 3));
+      } catch (error) {
+        console.error('Failed to fetch featured classes:', error);
+        setClasses([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchClasses();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center py-12">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-blue-600"></div>
+      </div>
+    );
+  }
+
+  if (classes.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-navy-700">No featured classes available at the moment.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {classes.slice(0, 3).map((classItem) => (
+        <Card key={classItem.id} hover>
+          <Link href={`/group-classes/${classItem.id}`}>
+            <Badge variant="info" className="mb-2">{classItem.category}</Badge>
+            <h3 className="text-xl font-bold text-navy-900 mb-2">{classItem.title}</h3>
+            <p className="text-navy-700 text-sm mb-4 line-clamp-2">{classItem.description}</p>
+            <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+              <div>
+                <p className="text-xs text-navy-600">Price per student</p>
+                <p className="text-2xl font-bold text-sky-blue-600">
+                  ${Number(classItem.pricePerStudent).toFixed(2)}
+                </p>
+              </div>
+              <Button variant="primary" size="sm">View Class</Button>
+            </div>
+          </Link>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
 export default function HomePage() {
-  const [featuredTutors, setFeaturedTutors] = useState<any[]>([]);
+  const [featuredInstructors, setFeaturedInstructors] = useState<any[]>([]);
   const [currentVisual, setCurrentVisual] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -66,19 +137,29 @@ export default function HomePage() {
   ];
 
   useEffect(() => {
-    const fetchTutors = async () => {
+    const fetchInstructors = async () => {
       try {
-        const response = await api.get('/tutors?limit=6');
+        setLoading(true);
+        // Try featured endpoint first, fallback to regular search
+        let response;
+        try {
+          response = await api.get('/tutors/featured/list');
+        } catch (e) {
+          // If featured endpoint doesn't exist, use regular search
+          response = await api.get('/tutors?limit=6');
+        }
         const responseData = response.data.data || response.data;
-        setFeaturedTutors(responseData?.tutors || responseData || []);
+        const instructorsList = Array.isArray(responseData) ? responseData : (responseData?.tutors || []);
+        setFeaturedInstructors(instructorsList);
       } catch (error) {
-        console.error('Failed to fetch tutors:', error);
+        console.error('Failed to fetch instructors:', error);
+        setFeaturedInstructors([]);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTutors();
+    fetchInstructors();
   }, []);
 
   useEffect(() => {
@@ -93,21 +174,25 @@ export default function HomePage() {
       icon: '👨‍✈️',
       title: '1-on-1 Lessons',
       description: 'Personalized instruction tailored to your learning goals and schedule.',
+      link: '/tutors',
     },
     {
       icon: '👥',
       title: 'Group Classes',
       description: 'Learn with peers in structured group sessions at affordable rates.',
+      link: '/group-classes',
     },
     {
       icon: '📚',
       title: 'Exam Prep',
       description: 'Comprehensive preparation for ATPL, IFR, and other aviation exams.',
+      link: '/exam-prep',
     },
     {
       icon: '✈️',
       title: 'Airline Interview Prep',
       description: 'Expert guidance to ace your airline interviews and assessments.',
+      link: '/airline-interview',
     },
   ];
 
@@ -217,23 +302,25 @@ export default function HomePage() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
             {features.map((feature, index) => (
-              <Card key={index} hover className="text-center">
-                <div className="text-5xl mb-4">{feature.icon}</div>
-                <h3 className="text-xl font-bold text-navy-900 mb-3">{feature.title}</h3>
-                <p className="text-navy-700">{feature.description}</p>
-              </Card>
+              <Link key={index} href={feature.link}>
+                <Card hover className="text-center">
+                  <div className="text-5xl mb-4">{feature.icon}</div>
+                  <h3 className="text-xl font-bold text-navy-900 mb-3">{feature.title}</h3>
+                  <p className="text-navy-700">{feature.description}</p>
+                </Card>
+              </Link>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Top Aviation Instructors */}
+      {/* Featured Instructors Slider */}
       <section className="py-20 bg-sky-blue-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center mb-12">
             <div>
-              <h2 className="text-4xl font-bold text-navy-900 mb-4">Top Aviation Instructors</h2>
-              <p className="text-xl text-navy-700">Learn from verified professionals</p>
+              <h2 className="text-4xl font-bold text-navy-900 mb-4">Featured Instructors</h2>
+              <p className="text-xl text-navy-700">Top-rated instructors recommended for you</p>
             </div>
             <Link href="/tutors">
               <Button variant="outline">View All</Button>
@@ -243,49 +330,49 @@ export default function HomePage() {
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-sky-blue-600"></div>
             </div>
-          ) : featuredTutors.length === 0 ? (
+          ) : featuredInstructors.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-navy-700">No instructors available at the moment.</p>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {featuredTutors.slice(0, 6).map((tutor) => (
-                <Card key={tutor.id} hover>
-                  <Link href={`/tutors/${tutor.tutorProfile?.id || tutor.id}`}>
+              {featuredInstructors.slice(0, 6).map((instructor) => (
+                <Card key={instructor.id} hover>
+                  <Link href={`/tutors/${instructor.tutorProfile?.id || instructor.id}`}>
                     <div className="flex items-start gap-4 mb-4">
                       <div className="w-16 h-16 bg-sky-blue-100 rounded-full flex items-center justify-center text-2xl font-bold text-sky-blue-700 flex-shrink-0">
-                        {tutor.firstName?.[0]}{tutor.lastName?.[0]}
+                        {instructor.firstName?.[0]}{instructor.lastName?.[0]}
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="text-lg font-bold text-navy-900 mb-1 truncate">
-                          {tutor.firstName} {tutor.lastName}
+                          {instructor.firstName} {instructor.lastName}
                         </h3>
                         <Badge variant="info" className="mb-2">
-                          {tutor.tutorProfile?.specialties?.[0]?.specialty || 'Aviation Professional'}
+                          {instructor.tutorProfile?.specialties?.[0]?.specialty || 'Aviation Professional'}
                         </Badge>
-                        {tutor.tutorProfile?.averageRating && (
+                        {instructor.tutorProfile?.averageRating && (
                           <div className="flex items-center gap-1">
                             <span className="text-yellow-500">⭐</span>
                             <span className="text-sm font-semibold text-navy-700">
-                              {tutor.tutorProfile.averageRating.toFixed(1)}
+                              {instructor.tutorProfile.averageRating.toFixed(1)}
                             </span>
                             <span className="text-sm text-navy-600">
-                              ({tutor.tutorProfile.totalLessonsTaught || 0} lessons)
+                              ({instructor.tutorProfile.totalLessonsTaught || 0} lessons)
                             </span>
                           </div>
                         )}
                       </div>
                     </div>
-                    {tutor.tutorProfile?.bio && (
+                    {instructor.tutorProfile?.bio && (
                       <p className="text-sm text-navy-700 mb-4 line-clamp-2">
-                        {tutor.tutorProfile.bio}
+                        {instructor.tutorProfile.bio}
                       </p>
                     )}
                     <div className="flex items-center justify-between pt-4 border-t border-gray-200">
                       <div>
                         <p className="text-xs text-navy-600">Starting at</p>
                         <p className="text-2xl font-bold text-sky-blue-600">
-                          ${tutor.tutorProfile?.hourlyRate || 'N/A'}/hr
+                          ${instructor.tutorProfile?.hourlyRate || 'N/A'}/hr
                         </p>
                       </div>
                       <Button variant="primary" size="sm">
@@ -297,6 +384,39 @@ export default function HomePage() {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Featured Group Classes */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center mb-12">
+            <div>
+              <h2 className="text-4xl font-bold text-navy-900 mb-4">Featured Group Classes</h2>
+              <p className="text-xl text-navy-700">Popular classes you can join today</p>
+            </div>
+            <Link href="/group-classes">
+              <Button variant="outline">View All Classes</Button>
+            </Link>
+          </div>
+          <FeaturedGroupClasses />
+        </div>
+      </section>
+
+      {/* Airline Logos Banner */}
+      <section className="py-12 bg-gradient-to-r from-sky-blue-600 to-sky-blue-700">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-8">
+            <h2 className="text-2xl font-bold text-white mb-2">Trusted by Aviation Professionals Worldwide</h2>
+            <p className="text-sky-blue-100">Prepare for interviews with major airlines</p>
+          </div>
+          <div className="flex flex-wrap justify-center items-center gap-8 opacity-90">
+            {['Ethiopian Airlines', 'Emirates', 'Qatar Airways', 'Etihad Airways', 'Turkish Airlines', 'Lufthansa'].map((airline) => (
+              <div key={airline} className="text-white font-semibold text-lg">
+                {airline}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -19,7 +19,9 @@ const studentNavItems: NavItem[] = [
   { label: 'My Bookings', href: '/student/bookings', icon: '📅' },
   { label: 'Messages', href: '/student/messages', icon: '💬' },
   { label: 'Payments', href: '/student/payments', icon: '💳' },
+  { label: 'Group Classes', href: '/group-classes', icon: '👥' },
   { label: 'Profile', href: '/student/profile', icon: '👤' },
+  { label: 'Settings', href: '/student/settings', icon: '⚙️' },
 ];
 
 const tutorNavItems: NavItem[] = [
@@ -30,10 +32,14 @@ const tutorNavItems: NavItem[] = [
   { label: 'Group Classes', href: '/tutor/classes', icon: '👥' },
   { label: 'Earnings', href: '/tutor/earnings', icon: '💰' },
   { label: 'Messages', href: '/tutor/messages', icon: '💬' },
+  { label: 'Settings', href: '/tutor/settings', icon: '⚙️' },
 ];
 
 const adminNavItems: NavItem[] = [
   { label: 'Dashboard', href: '/admin/dashboard', icon: '📊' },
+  { label: 'Users', href: '/admin/users', icon: '👥' },
+  { label: 'Analytics', href: '/admin/analytics', icon: '📈' },
+  { label: 'Financials', href: '/admin/financials', icon: '💰' },
   { label: 'Tutors', href: '/admin/tutors', icon: '👨‍🏫' },
   { label: 'Students', href: '/admin/students', icon: '👨‍🎓' },
   { label: 'Bookings', href: '/admin/bookings', icon: '📋' },

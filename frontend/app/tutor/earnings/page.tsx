@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import api from '@/lib/api';
@@ -77,10 +76,8 @@ export default function TutorEarningsPage() {
   }).reduce((sum, e) => sum + e.amount, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <DashboardSidebar role="tutor" />
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto">
+    <div className="p-8">
+      <div className="max-w-7xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Earnings</h1>
             <p className="text-gray-600">View your earnings and request payouts</p>
@@ -176,7 +173,7 @@ export default function TutorEarningsPage() {
             </div>
           </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 }

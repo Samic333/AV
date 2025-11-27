@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/store/auth-store';
 import NotificationBell from '@/components/notifications/NotificationBell';
+import Button from '@/components/ui/Button';
+import CreateClassModal from '@/components/instructor/CreateClassModal';
 
 export default function TopBar() {
   const router = useRouter();
@@ -12,6 +14,7 @@ export default function TopBar() {
   const logout = useAuthStore((state) => state.logout);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAvatarOpen, setIsAvatarOpen] = useState(false);
+  const [isCreateClassModalOpen, setIsCreateClassModalOpen] = useState(false);
   const avatarRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -77,7 +80,7 @@ export default function TopBar() {
               href="/tutors"
               className="text-navy-700 hover:text-sky-blue-600 transition-colors font-medium"
             >
-              Browse Tutors
+              Find Instructor
             </Link>
             <Link
               href="/group-classes"
@@ -93,8 +96,17 @@ export default function TopBar() {
             </Link>
           </div>
 
-          {/* Right Side: Notifications and Avatar */}
+          {/* Right Side: Create Class (for instructors), Notifications and Avatar */}
           <div className="flex items-center space-x-4">
+            {user?.role === 'tutor' && (
+              <Button
+                variant="primary"
+                onClick={() => setIsCreateClassModalOpen(true)}
+                className="hidden md:flex"
+              >
+                Create Class
+              </Button>
+            )}
             <NotificationBell />
             
             {/* Avatar Dropdown */}
@@ -147,20 +159,13 @@ export default function TopBar() {
                       Profile
                     </Link>
                     <Link
-                      href={getProfileLink()}
+                      href={user?.role === 'admin' ? '/admin/settings' : user?.role === 'tutor' ? '/tutor/settings' : '/student/settings'}
                       onClick={() => setIsAvatarOpen(false)}
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
                     >
                       Settings
                     </Link>
                     <div className="border-t border-gray-200 my-1" />
-                    <Link
-                      href="/"
-                      onClick={() => setIsAvatarOpen(false)}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
-                    >
-                      Go to Main Site
-                    </Link>
                     <button
                       onClick={handleLogout}
                       className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100 transition-colors"
@@ -214,7 +219,7 @@ export default function TopBar() {
               onClick={() => setIsMenuOpen(false)}
               className="block text-navy-700 hover:text-sky-blue-600 transition-colors"
             >
-              Browse Tutors
+              Find Instructor
             </Link>
             <Link
               href="/group-classes"
@@ -233,6 +238,10 @@ export default function TopBar() {
           </div>
         </div>
       )}
+      <CreateClassModal
+        isOpen={isCreateClassModalOpen}
+        onClose={() => setIsCreateClassModalOpen(false)}
+      />
     </nav>
   );
 }

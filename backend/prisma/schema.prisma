@@ -16,6 +16,12 @@ enum UserRole {
   admin
 }
 
+enum AdminRole {
+  super_admin
+  support_admin
+  finance_admin
+}
+
 enum TutorStatus {
   pending
   approved
@@ -88,10 +94,14 @@ model User {
   email         String    @unique
   passwordHash  String    @map("password_hash")
   role          UserRole  @default(student)
+  adminRole     AdminRole? @map("admin_role")
   firstName     String    @map("first_name")
   lastName      String    @map("last_name")
   avatarUrl     String?   @map("avatar_url")
   phone         String?
+  secondaryEmail String?  @map("secondary_email")
+  country       String?
+  address       String?  @db.Text
   timezone      String    @default("UTC")
   emailVerified Boolean   @default(false) @map("email_verified")
   createdAt     DateTime  @default(now()) @map("created_at")
@@ -112,6 +122,9 @@ model User {
   payoutRequests    PayoutRequest[]
   auditLogs         AuditLog[]
   cancelledBookings Booking[]           @relation("CancelledBy")
+  settings          UserSettings?
+  examPrepRequests  ExamPrepRequest[]
+  expenses          Expense[]
 
   @@map("users")
 }
@@ -142,6 +155,7 @@ model TutorProfile {
   totalLessonsTaught Int        @default(0) @map("total_lessons_taught")
   totalStudents     Int         @default(0) @map("total_students")
   averageRating     Decimal?    @map("average_rating") @db.Decimal(3, 2)
+  isFeatured        Boolean     @default(false) @map("is_featured")
   createdAt         DateTime    @default(now()) @map("created_at")
   updatedAt         DateTime    @updatedAt @map("updated_at")
 
@@ -157,6 +171,7 @@ model TutorProfile {
   classes        GroupClass[]
   wallet         TutorWallet?
   payoutRequests PayoutRequest[]
+  examPrepBids   ExamPrepBid[]
 
   @@map("tutor_profiles")
 }
@@ -250,13 +265,17 @@ model TutorReview {
 }
 
 model StudentProfile {
-  id               String   @id @default(uuid())
-  userId           String   @unique @map("user_id")
-  learningGoals    String?  @map("learning_goals") @db.Text
-  experienceLevel  String?  @map("experience_level")
-  preferredLanguages String[] @map("preferred_languages")
-  createdAt        DateTime @default(now()) @map("created_at")
-  updatedAt        DateTime @updatedAt @map("updated_at")
+  id                      String   @id @default(uuid())
+  userId                  String   @unique @map("user_id")
+  learningGoals           String?  @map("learning_goals") @db.Text
+  yearsOfAviationExperience Int?   @map("years_of_aviation_experience")
+  preferredLanguages      String[] @map("preferred_languages")
+  preferredAircraftTypes  String[] @map("preferred_aircraft_types")
+  currentRole             String?  @map("current_role")
+  currentCompany          String?  @map("current_company")
+  city                    String?
+  createdAt               DateTime @default(now()) @map("created_at")
+  updatedAt               DateTime @updatedAt @map("updated_at")
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -321,6 +340,7 @@ model GroupClass {
   title          String
   description    String           @db.Text
   topic          String
+  category       String?          // ATPL Theory, IFR Procedures, Cabin Crew Interview Prep, etc.
   maxStudents    Int              @map("max_students")
   currentStudents Int             @default(0) @map("current_students")
   pricePerStudent Decimal         @map("price_per_student") @db.Decimal(10, 2)
@@ -328,6 +348,12 @@ model GroupClass {
   durationMinutes Int             @map("duration_minutes")
   meetingLink    String?          @map("meeting_link")
   meetingId      String?          @map("meeting_id")
+  pictureUrl     String?          @map("picture_url")
+  videoUrl       String?          @map("video_url")
+  language       String?
+  aircraftType   String?          @map("aircraft_type")
+  airlineFocus   String?          @map("airline_focus")
+  isFeatured     Boolean          @default(false) @map("is_featured")
   status         GroupClassStatus @default(pending_approval)
   approvedBy     String?          @map("approved_by")
   approvedAt     DateTime?        @map("approved_at")
@@ -453,6 +479,8 @@ model Message {
   attachmentUrl String?   @map("attachment_url")
   attachmentType String?  @map("attachment_type")
   isRead        Boolean   @default(false) @map("is_read")
+  isFlagged     Boolean   @default(false) @map("is_flagged")
+  flaggedReason String?   @map("flagged_reason") @db.Text
   readAt        DateTime? @map("read_at")
   createdAt     DateTime  @default(now()) @map("created_at")
 
@@ -509,5 +537,66 @@ model PlatformSetting {
   updatedAt   DateTime @updatedAt @map("updated_at")
 
   @@map("platform_settings")
+}
+
+model UserSettings {
+  id                String   @id @default(uuid())
+  userId            String   @unique @map("user_id")
+  theme             String   @default("light")
+  textSize          String   @default("medium") @map("text_size")
+  language          String?
+  emailNotifications Boolean @default(true) @map("email_notifications")
+  inAppNotifications Boolean @default(true) @map("in_app_notifications")
+  createdAt         DateTime @default(now()) @map("created_at")
+  updatedAt         DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_settings")
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  description String
+  amount      Decimal  @db.Decimal(10, 2)
+  currency    String   @default("USD")
+  category    String?
+  date        DateTime
+  createdBy   User?    @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  createdById String?  @map("created_by_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("expenses")
+}
+
+model ExamPrepRequest {
+  id          String   @id @default(uuid())
+  studentId   String   @map("student_id")
+  subject     String
+  description String   @db.Text
+  status      String   @default("open")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  student User @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  bids    ExamPrepBid[]
+
+  @@map("exam_prep_requests")
+}
+
+model ExamPrepBid {
+  id          String   @id @default(uuid())
+  requestId   String   @map("request_id")
+  tutorId     String   @map("tutor_id")
+  amount      Decimal  @db.Decimal(10, 2)
+  message     String?  @db.Text
+  status      String   @default("pending")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  request ExamPrepRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  tutor   TutorProfile    @relation(fields: [tutorId], references: [id], onDelete: Cascade)
+
+  @@map("exam_prep_bids")
 }
 

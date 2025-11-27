@@ -1,18 +1,13 @@
 'use client';
 
-import AuthGuard from '@/components/auth/AuthGuard';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
 
 export default function AdminPaymentsPage() {
   return (
-    <AuthGuard requiredRole="admin">
-      <div className="min-h-screen bg-gray-50 flex">
-        <DashboardSidebar role="admin" />
-        <main className="flex-1 p-8">
-          <div className="max-w-7xl mx-auto">
+    <div className="p-8">
+      <div className="max-w-7xl mx-auto">
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-gray-900 mb-2">Payments</h1>
               <p className="text-gray-600">View payment overview and transactions</p>
@@ -59,9 +54,8 @@ export default function AdminPaymentsPage() {
               </div>
             </Card>
           </div>
-        </main>
       </div>
-    </AuthGuard>
+    </div>
   );
 }
 

@@ -1,13 +1,31 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class ClassesService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll() {
+  async findAll(filters?: { category?: string; search?: string; featured?: boolean }) {
+    const where: any = { status: 'approved' };
+    
+    if (filters?.category) {
+      where.category = filters.category;
+    }
+    
+    if (filters?.featured) {
+      where.isFeatured = true;
+    }
+    
+    if (filters?.search) {
+      where.OR = [
+        { title: { contains: filters.search, mode: 'insensitive' } },
+        { description: { contains: filters.search, mode: 'insensitive' } },
+        { topic: { contains: filters.search, mode: 'insensitive' } },
+      ];
+    }
+
     return this.prisma.groupClass.findMany({
-      where: { status: 'approved' },
+      where,
       include: {
         tutor: {
           include: {
@@ -19,6 +37,38 @@ export class ClassesService {
               },
             },
           },
+        },
+        enrollments: {
+          where: { cancelledAt: null },
+          select: { id: true },
+        },
+      },
+      orderBy: { scheduledAt: 'asc' },
+    });
+  }
+
+  async getFeatured() {
+    return this.prisma.groupClass.findMany({
+      where: { 
+        status: 'approved',
+        isFeatured: true,
+      },
+      take: 6,
+      include: {
+        tutor: {
+          include: {
+            user: {
+              select: {
+                firstName: true,
+                lastName: true,
+                avatarUrl: true,
+              },
+            },
+          },
+        },
+        enrollments: {
+          where: { cancelledAt: null },
+          select: { id: true },
         },
       },
       orderBy: { scheduledAt: 'asc' },
@@ -79,10 +129,17 @@ export class ClassesService {
         title: data.title,
         description: data.description,
         topic: data.topic,
+        category: data.category,
         maxStudents: data.maxStudents,
         pricePerStudent: data.pricePerStudent,
         scheduledAt: data.scheduledAt,
         durationMinutes: data.durationMinutes,
+        pictureUrl: data.pictureUrl,
+        videoUrl: data.videoUrl,
+        language: data.language,
+        aircraftType: data.aircraftType,
+        airlineFocus: data.airlineFocus,
+        isFeatured: data.isFeatured || false,
         status: 'pending_approval',
       },
     });
@@ -132,5 +189,68 @@ export class ClassesService {
     });
 
     return enrollment;
+  }
+
+  async update(classId: string, tutorId: string, data: any) {
+    const classItem = await this.prisma.groupClass.findUnique({
+      where: { id: classId },
+    });
+
+    if (!classItem) {
+      throw new NotFoundException('Class not found');
+    }
+
+    if (classItem.tutorId !== tutorId) {
+      throw new ForbiddenException('Not authorized to update this class');
+    }
+
+    if (classItem.status === 'completed' || classItem.status === 'cancelled') {
+      throw new BadRequestException('Cannot update completed or cancelled class');
+    }
+
+    return this.prisma.groupClass.update({
+      where: { id: classId },
+      data: {
+        title: data.title,
+        description: data.description,
+        topic: data.topic,
+        category: data.category,
+        maxStudents: data.maxStudents,
+        pricePerStudent: data.pricePerStudent,
+        scheduledAt: data.scheduledAt,
+        durationMinutes: data.durationMinutes,
+        pictureUrl: data.pictureUrl,
+        videoUrl: data.videoUrl,
+        language: data.language,
+        aircraftType: data.aircraftType,
+        airlineFocus: data.airlineFocus,
+        isFeatured: data.isFeatured || false,
+      },
+    });
+  }
+
+  async cancel(classId: string, tutorId: string) {
+    const classItem = await this.prisma.groupClass.findUnique({
+      where: { id: classId },
+    });
+
+    if (!classItem) {
+      throw new NotFoundException('Class not found');
+    }
+
+    if (classItem.tutorId !== tutorId) {
+      throw new ForbiddenException('Not authorized to cancel this class');
+    }
+
+    if (classItem.status === 'completed' || classItem.status === 'cancelled') {
+      throw new BadRequestException('Class is already completed or cancelled');
+    }
+
+    return this.prisma.groupClass.update({
+      where: { id: classId },
+      data: {
+        status: 'cancelled',
+      },
+    });
   }
 }

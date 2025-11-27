@@ -17,5 +17,15 @@ export class UsersController {
   async updateProfile(@CurrentUser() user: any, @Body() data: any) {
     return this.usersService.updateProfile(user.id, data);
   }
+
+  @Get('settings')
+  async getSettings(@CurrentUser() user: any) {
+    return this.usersService.getSettings(user.id);
+  }
+
+  @Put('settings')
+  async updateSettings(@CurrentUser() user: any, @Body() data: any) {
+    return this.usersService.updateSettings(user.id, data);
+  }
 }
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
+import { useAuthStore } from '@/store/auth-store';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -13,6 +13,7 @@ import { format, parseISO, isToday, isAfter, startOfDay } from 'date-fns';
 
 export default function TutorDashboard() {
   const router = useRouter();
+  const user = useAuthStore((state) => state.user);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [tutorProfile, setTutorProfile] = useState<TutorProfileExtended | null>(null);
   const [wallet, setWallet] = useState<{
@@ -21,6 +22,16 @@ export default function TutorDashboard() {
     totalEarned: number;
   } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [profileComplete, setProfileComplete] = useState(true);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
+  const firstName = user?.firstName || 'Instructor';
 
   useEffect(() => {
     fetchData();
@@ -85,15 +96,40 @@ export default function TutorDashboard() {
   const monthlyEarnings = wallet ? wallet.totalEarned : 0; // Simplified - could calculate from transactions
   const totalStudents = tutorProfile?.totalStudents || 0;
 
+  useEffect(() => {
+    // Check if profile is complete
+    if (tutorProfile) {
+      const complete = !!(tutorProfile.bio && tutorProfile.specialties && tutorProfile.specialties.length > 0);
+      setProfileComplete(complete);
+    }
+  }, [tutorProfile]);
+
   return (
-    <div className="min-h-screen bg-sky-blue-50 flex">
-      <DashboardSidebar role="tutor" />
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-navy-900 mb-2">Tutor Dashboard</h1>
-            <p className="text-navy-600">Manage your tutoring business and help students succeed.</p>
-          </div>
+    <div className="p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-navy-900 mb-1">
+            {getGreeting()}, {firstName}
+          </h1>
+          <p className="text-navy-600">Welcome back, Instructor</p>
+        </div>
+
+        {/* Profile Completion CTA */}
+        {!profileComplete && (
+          <Card className="mb-8 bg-yellow-50 border-yellow-200">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-lg font-semibold text-navy-900 mb-1">Complete Your Profile</h3>
+                <p className="text-navy-700 text-sm">
+                  A complete profile gets more bookings. Add your bio, specialties, and experience to attract more students.
+                </p>
+              </div>
+              <Link href="/tutor/profile">
+                <Button variant="primary">Complete Profile</Button>
+              </Link>
+            </div>
+          </Card>
+        )}
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -187,6 +223,15 @@ export default function TutorDashboard() {
                         >
                           View Details
                         </Button>
+                        {booking.meetingLink && (
+                          <Button
+                            variant="outline"
+                            onClick={() => window.open(booking.meetingLink, '_blank')}
+                            className="ml-2"
+                          >
+                            Join (Zoom)
+                          </Button>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -202,6 +247,45 @@ export default function TutorDashboard() {
               )}
             </Card>
           </div>
+
+          {/* Recent Lessons */}
+          {bookings.filter((b) => b.status === 'completed').length > 0 && (
+            <div className="mb-8">
+              <Card>
+                <h2 className="text-xl font-semibold text-navy-900 mb-4">Recent Lessons</h2>
+                <div className="space-y-4">
+                  {bookings
+                    .filter((b) => b.status === 'completed')
+                    .slice(0, 3)
+                    .map((booking) => (
+                      <div
+                        key={booking.id}
+                        className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-sky-blue-50 rounded-lg"
+                      >
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-navy-900 mb-2">
+                            {booking.lessonType || 'Lesson'}
+                          </h3>
+                          <div className="space-y-1 text-sm text-navy-600">
+                            <p>
+                              📅 {format(parseISO(booking.scheduledAt), 'MMM d, yyyy')} at{' '}
+                              {format(parseISO(booking.scheduledAt), 'h:mm a')}
+                            </p>
+                            {booking.student && (
+                              <p>
+                                👨‍🎓 Student: {booking.student.firstName} {booking.student.lastName}
+                              </p>
+                            )}
+                            <p>⏱️ Duration: {booking.durationMinutes} minutes</p>
+                          </div>
+                        </div>
+                        <Badge variant="success">Completed</Badge>
+                      </div>
+                    ))}
+                </div>
+              </Card>
+            </div>
+          )}
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -251,8 +335,7 @@ export default function TutorDashboard() {
             </Card>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
   );
 }
 

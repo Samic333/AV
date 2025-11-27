@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -75,14 +74,12 @@ export default function StudentBookingsPage() {
   const filteredBookings = getFilteredBookings();
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <DashboardSidebar role="student" />
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">My Bookings</h1>
-            <p className="text-gray-600">Manage your lesson bookings</p>
-          </div>
+    <div className="p-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-navy-900 mb-2">My Bookings</h1>
+          <p className="text-navy-600">Manage your lesson bookings</p>
+        </div>
 
           <div className="mb-6 flex gap-4 flex-wrap">
             <Button
@@ -111,62 +108,61 @@ export default function StudentBookingsPage() {
             </Button>
           </div>
 
-          {isLoading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-aviation-blue mx-auto"></div>
-            </div>
-          ) : filteredBookings.length === 0 ? (
-            <Card className="text-center py-12">
-              <p className="text-lg text-gray-600 mb-2">No bookings found</p>
-              <p className="text-sm text-gray-500 mb-4">
-                {filter === 'all'
-                  ? 'Book your first lesson to get started!'
-                  : `No ${filter} bookings found.`}
-              </p>
-              {filter === 'all' && (
-                <Link href="/tutors">
-                  <Button variant="primary">Browse Tutors</Button>
-                </Link>
-              )}
-            </Card>
-          ) : (
-            <div className="space-y-4">
-              {filteredBookings.map((booking) => (
-                <Card key={booking.id}>
-                  <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-                    <div className="flex-1">
-                      <h3 className="text-lg font-semibold text-gray-900 mb-1">
-                        {booking.lessonType || 'Lesson'}
-                      </h3>
-                      {booking.tutor?.user && (
-                        <p className="text-gray-600 text-sm mb-2">
-                          with {booking.tutor.user.firstName} {booking.tutor.user.lastName}
-                        </p>
-                      )}
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                        <span>
-                          📅 {format(parseISO(booking.scheduledAt), 'MMM d, yyyy')} at{' '}
-                          {format(parseISO(booking.scheduledAt), 'h:mm a')}
-                        </span>
-                        <span>⏱️ {booking.durationMinutes} minutes</span>
-                        <span>💰 ${Number(booking.totalPrice).toFixed(2)}</span>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                      <Badge variant={getStatusBadgeVariant(booking.status)}>
-                        {booking.status}
-                      </Badge>
-                      <Button variant="outline" size="sm">
-                        View Details
-                      </Button>
+        {isLoading ? (
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sky-blue-600 mx-auto"></div>
+          </div>
+        ) : filteredBookings.length === 0 ? (
+          <Card className="text-center py-12">
+            <p className="text-lg text-navy-600 mb-2">No bookings found</p>
+            <p className="text-sm text-navy-500 mb-4">
+              {filter === 'all'
+                ? 'Book your first lesson to get started!'
+                : `No ${filter} bookings found.`}
+            </p>
+            {filter === 'all' && (
+              <Link href="/tutors">
+                <Button variant="primary">Find Instructor</Button>
+              </Link>
+            )}
+          </Card>
+        ) : (
+          <div className="space-y-4">
+            {filteredBookings.map((booking) => (
+              <Card key={booking.id}>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-semibold text-navy-900 mb-1">
+                      {booking.lessonType || 'Lesson'}
+                    </h3>
+                    {booking.tutor?.user && (
+                      <p className="text-navy-600 text-sm mb-2">
+                        with {booking.tutor.user.firstName} {booking.tutor.user.lastName}
+                      </p>
+                    )}
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-navy-600">
+                      <span>
+                        📅 {format(parseISO(booking.scheduledAt), 'MMM d, yyyy')} at{' '}
+                        {format(parseISO(booking.scheduledAt), 'h:mm a')}
+                      </span>
+                      <span>⏱️ {booking.durationMinutes} minutes</span>
+                      <span>💰 ${Number(booking.totalPrice).toFixed(2)}</span>
                     </div>
                   </div>
-                </Card>
-              ))}
-            </div>
-          )}
-        </div>
-      </main>
+                  <div className="flex items-center gap-4">
+                    <Badge variant={getStatusBadgeVariant(booking.status)}>
+                      {booking.status}
+                    </Badge>
+                    <Button variant="outline" size="sm">
+                      View Details
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

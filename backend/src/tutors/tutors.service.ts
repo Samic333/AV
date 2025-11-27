@@ -69,10 +69,29 @@ export class TutorsService {
     }
 
     if (search) {
+      const searchLower = search.toLowerCase();
       where.OR = [
         { firstName: { contains: search, mode: 'insensitive' } },
         { lastName: { contains: search, mode: 'insensitive' } },
         { tutorProfile: { bio: { contains: search, mode: 'insensitive' } } },
+        {
+          tutorProfile: {
+            specialties: {
+              some: {
+                specialty: { contains: search, mode: 'insensitive' },
+              },
+            },
+          },
+        },
+        {
+          tutorProfile: {
+            aircraftTypes: {
+              some: {
+                aircraftType: { contains: search, mode: 'insensitive' },
+              },
+            },
+          },
+        },
       ];
     }
 
@@ -318,6 +337,44 @@ export class TutorsService {
         },
       },
       orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async getFeatured() {
+    return this.prisma.user.findMany({
+      where: {
+        tutorProfile: {
+          status: 'approved',
+          isFeatured: true,
+        },
+      },
+      take: 6,
+      include: {
+        tutorProfile: {
+          include: {
+            specialties: true,
+            aircraftTypes: true,
+            languages: true,
+            reviews: {
+              take: 5,
+              orderBy: { createdAt: 'desc' },
+              include: {
+                student: {
+                  select: {
+                    firstName: true,
+                    lastName: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        tutorProfile: {
+          averageRating: 'desc',
+        },
+      },
     });
   }
 }

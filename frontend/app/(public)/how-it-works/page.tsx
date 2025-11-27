@@ -69,14 +69,14 @@ export default function HowItWorksPage() {
               </li>
             </ul>
             <Link href="/register/student">
-              <Button variant="primary" className="w-full bg-white text-sky-blue-600 hover:bg-gray-100">
+              <Button variant="primary" className="w-full bg-sky-blue-600 text-white hover:bg-sky-blue-700 border-0">
                 Join as Student
               </Button>
             </Link>
           </Card>
 
           <Card className="bg-gradient-to-br from-navy-900 to-navy-800 text-white">
-            <h2 className="text-2xl font-bold mb-4">For Tutors</h2>
+            <h2 className="text-2xl font-bold mb-4">For Instructors</h2>
             <ul className="space-y-3 mb-6">
               <li className="flex items-start">
                 <span className="mr-2">✓</span>
@@ -96,8 +96,8 @@ export default function HowItWorksPage() {
               </li>
             </ul>
             <Link href="/register/tutor">
-              <Button variant="primary" className="w-full bg-white text-navy-900 hover:bg-gray-100">
-                Become a Tutor
+              <Button variant="outline" className="w-full bg-white text-sky-blue-600 border-2 border-sky-blue-600 hover:bg-sky-blue-50">
+                Become an Instructor
               </Button>
             </Link>
           </Card>
@@ -111,7 +111,7 @@ export default function HowItWorksPage() {
               <Button variant="primary">Start Learning</Button>
             </Link>
             <Link href="/tutors">
-              <Button variant="outline">Browse Tutors</Button>
+              <Button variant="outline">Find Instructor</Button>
             </Link>
           </div>
         </Card>

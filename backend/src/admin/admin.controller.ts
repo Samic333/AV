@@ -1,4 +1,4 @@
-import { Controller, Get, Put, Post, Body, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Put, Post, Body, Param, Query, UseGuards } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { Roles } from '../common/decorators/roles.decorator';
@@ -36,8 +36,8 @@ export class AdminController {
   }
 
   @Get('payments/transactions')
-  async getAllTransactions() {
-    return this.adminService.getAllTransactions();
+  async getAllTransactions(@Query() query: any) {
+    return this.adminService.getAllTransactions(query.view, query.period, query.year);
   }
 
   @Get('payments/payouts')
@@ -63,5 +63,61 @@ export class AdminController {
   @Put('classes/:id/reject')
   async rejectClass(@Param('id') id: string) {
     return this.adminService.rejectClass(id);
+  }
+
+  @Get('users')
+  async getAllUsers(@Query() query: any) {
+    return this.adminService.getAllUsers(query);
+  }
+
+  @Get('users/search')
+  async searchUsers(@Query('q') query: string) {
+    return this.adminService.searchUsers(query);
+  }
+
+  @Post('users/bulk-action')
+  async bulkAction(@Body() body: { userIds: string[]; action: string }) {
+    return this.adminService.bulkAction(body.userIds, body.action);
+  }
+
+  @Get('users/:id')
+  async getUserDetails(@Param('id') id: string) {
+    return this.adminService.getUserDetails(id);
+  }
+
+  @Put('users/:id/suspend')
+  async suspendUser(@Param('id') id: string, @Body() body: { reason: string }) {
+    return this.adminService.suspendUser(id, body.reason);
+  }
+
+  @Post('announcements')
+  async sendAnnouncement(
+    @Body() body: { target: 'all' | 'students' | 'instructors' | string; title: string; message: string },
+  ) {
+    return this.adminService.sendAnnouncement(body.target, body.title, body.message);
+  }
+
+  @Get('financials/summary')
+  async getFinancialSummary(@Query() query: any) {
+    return this.adminService.getFinancialSummary(query.view, query.period, query.year);
+  }
+
+  @Get('financials/expenses')
+  async getExpenses(@Query() query: any) {
+    return this.adminService.getExpenses(query.view, query.period, query.year);
+  }
+
+  @Post('financials/expenses')
+  async createExpense(@CurrentUser() user: any, @Body() body: any) {
+    return this.adminService.createExpense({
+      ...body,
+      date: new Date(body.date),
+      createdBy: user.id,
+    });
+  }
+
+  @Get('messages/flagged')
+  async getFlaggedMessages() {
+    return this.adminService.getFlaggedMessages();
   }
 }

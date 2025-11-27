@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "cd backend && npm run start:dev",
+    "predev": "node -e \"try { require('concurrently'); } catch(e) { console.error('\\n❌ Error: concurrently is not installed.\\n\\nPlease run: npm install\\n\\nThis will install concurrently and other dependencies needed to run the dev servers.\\n'); process.exit(1); }\"",
+    "dev": "concurrently --names \"backend,frontend\" --prefix-colors \"blue,green\" \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "build": "npm run build:backend && npm run build:frontend",
-    "build:backend": "cd backend && npm run build",
-    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm install && npm run build",
+    "build:frontend": "cd frontend && npm install && npm run build",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install"
   },
   "devDependencies": {

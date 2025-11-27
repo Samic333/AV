@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import { useAuthStore } from '@/store/auth-store';
@@ -14,31 +13,48 @@ const studentProfileSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   phone: z.string().optional(),
+  secondaryEmail: z.string().email().optional().or(z.literal('')),
   timezone: z.string().min(1, 'Timezone is required'),
   country: z.string().optional(),
-  experienceLevel: z.enum(['Beginner', 'Intermediate', 'Advanced']).optional(),
+  address: z.string().optional(),
+  city: z.string().optional(),
+  yearsOfAviationExperience: z.number().min(0).max(40).optional(),
   learningGoals: z.string().optional(),
   preferredLanguages: z.array(z.string()).optional(),
-  preferredAircraftTypes: z.string().optional(),
-  preferredLearningFormat: z.array(z.string()).optional(),
+  preferredAircraftTypes: z.array(z.string()).optional(),
+  currentRole: z.string().optional(),
+  currentCompany: z.string().optional(),
 });
 
 type StudentProfileForm = z.infer<typeof studentProfileSchema>;
 
-const EXPERIENCE_LEVELS = ['Beginner', 'Intermediate', 'Advanced'] as const;
-const LEARNING_GOALS_OPTIONS = [
-  'ATPL theory',
-  'Airline assessment prep',
-  'IFR proficiency',
-  'VFR proficiency',
-  'Cabin crew interview prep',
-  'ATC training',
-  'Aircraft systems',
-  'Aviation English',
-  'Other',
+const COMMON_LANGUAGES = ['English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 'Arabic', 'Chinese', 'Japanese', 'Russian', 'Hindi', 'Korean'];
+const AIRCRAFT_TYPES = ['Q400', 'A320', 'B737', 'B787', 'ATR72', 'A330', 'A350', 'B777', 'Cessna 172', 'Piper', 'DA-42', 'Other'];
+const COUNTRIES = [
+  'USA', 'UK', 'Canada', 'Australia', 'Germany', 'France', 'Spain', 'Italy', 'Netherlands', 'Belgium',
+  'Switzerland', 'Austria', 'Sweden', 'Norway', 'Denmark', 'Finland', 'Poland', 'Portugal', 'Greece',
+  'UAE', 'Saudi Arabia', 'Qatar', 'Kuwait', 'Bahrain', 'Oman', 'Egypt', 'South Africa', 'Kenya',
+  'Nigeria', 'Ethiopia', 'Singapore', 'Malaysia', 'Thailand', 'Indonesia', 'Philippines', 'India',
+  'China', 'Japan', 'South Korea', 'Hong Kong', 'Taiwan', 'New Zealand', 'Brazil', 'Mexico', 'Argentina',
+  'Chile', 'Colombia', 'Turkey', 'Israel', 'Russia', 'Ukraine', 'Other'
 ];
-const LEARNING_FORMATS = ['1:1', 'Group', 'Sim prep', 'Online', 'In-person'];
-const COMMON_LANGUAGES = ['English', 'Spanish', 'French', 'German', 'Italian', 'Portuguese', 'Arabic', 'Chinese', 'Japanese'];
+
+const getTimezoneForCountry = (country: string): string => {
+  const timezoneMap: Record<string, string> = {
+    'USA': 'America/New_York',
+    'UK': 'Europe/London',
+    'Canada': 'America/Toronto',
+    'Australia': 'Australia/Sydney',
+    'Germany': 'Europe/Berlin',
+    'France': 'Europe/Paris',
+    'UAE': 'Asia/Dubai',
+    'Singapore': 'Asia/Singapore',
+    'India': 'Asia/Kolkata',
+    'Japan': 'Asia/Tokyo',
+    'China': 'Asia/Shanghai',
+  };
+  return timezoneMap[country] || 'UTC';
+};
 
 export default function StudentProfilePage() {
   const user = useAuthStore((state) => state.user);
@@ -60,16 +76,21 @@ export default function StudentProfilePage() {
       phone: user?.phone || '',
       timezone: user?.timezone || 'UTC',
       country: '',
-      experienceLevel: undefined,
+      address: '',
+      city: '',
+      secondaryEmail: '',
+      yearsOfAviationExperience: 0,
       learningGoals: '',
       preferredLanguages: [],
-      preferredAircraftTypes: '',
-      preferredLearningFormat: [],
+      preferredAircraftTypes: [],
+      currentRole: '',
+      currentCompany: '',
     },
   });
 
   const preferredLanguages = watch('preferredLanguages') || [];
-  const preferredLearningFormat = watch('preferredLearningFormat') || [];
+  const preferredAircraftTypes = watch('preferredAircraftTypes') || [];
+  const country = watch('country');
 
   useEffect(() => {
     fetchProfile();
@@ -89,9 +110,16 @@ export default function StudentProfilePage() {
         const profileData = profileResponse.data.data || profileResponse.data;
         setStudentProfile(profileData);
         
-        setValue('experienceLevel', profileData.experienceLevel);
+        setValue('yearsOfAviationExperience', profileData.yearsOfAviationExperience || 0);
         setValue('learningGoals', profileData.learningGoals || '');
         setValue('preferredLanguages', profileData.preferredLanguages || []);
+        setValue('preferredAircraftTypes', profileData.preferredAircraftTypes || []);
+        setValue('currentRole', profileData.currentRole || '');
+        setValue('currentCompany', profileData.currentCompany || '');
+        setValue('city', profileData.city || '');
+        setValue('country', userData.country || '');
+        setValue('address', userData.address || '');
+        setValue('secondaryEmail', userData.secondaryEmail || '');
       } catch (error) {
         // Student profile might not exist yet
         console.log('Student profile not found, will create on save');
@@ -118,17 +146,23 @@ export default function StudentProfilePage() {
         lastName: data.lastName,
         phone: data.phone,
         timezone: data.timezone,
+        country: data.country,
+        address: data.address,
+        secondaryEmail: data.secondaryEmail || null,
       });
 
-      // Update student profile (if endpoint exists)
+      // Update student profile
       try {
         await api.put('/students/profile', {
-          experienceLevel: data.experienceLevel,
+          yearsOfAviationExperience: data.yearsOfAviationExperience,
           learningGoals: data.learningGoals,
           preferredLanguages: data.preferredLanguages,
+          preferredAircraftTypes: data.preferredAircraftTypes,
+          currentRole: data.currentRole,
+          currentCompany: data.currentCompany,
+          city: data.city,
         });
       } catch (error) {
-        // Endpoint might not exist yet, but structure is ready
         console.log('Student profile endpoint not available yet');
       }
 
@@ -142,7 +176,7 @@ export default function StudentProfilePage() {
     }
   };
 
-  const toggleArrayValue = (field: 'preferredLanguages' | 'preferredLearningFormat', value: string) => {
+  const toggleArrayValue = (field: 'preferredLanguages' | 'preferredAircraftTypes', value: string) => {
     const current = watch(field) || [];
     const updated = current.includes(value)
       ? current.filter((v) => v !== value)
@@ -150,26 +184,28 @@ export default function StudentProfilePage() {
     setValue(field, updated);
   };
 
+  useEffect(() => {
+    if (country) {
+      const timezone = getTimezoneForCountry(country);
+      setValue('timezone', timezone);
+    }
+  }, [country, setValue]);
+
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex">
-        <DashboardSidebar role="student" />
-        <main className="flex-1 p-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-aviation-blue mx-auto"></div>
-            </div>
+      <div className="p-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sky-blue-600 mx-auto"></div>
           </div>
-        </main>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <DashboardSidebar role="student" />
-      <main className="flex-1 p-8">
-        <div className="max-w-4xl mx-auto">
+    <div className="p-8">
+      <div className="max-w-4xl mx-auto">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">Profile Settings</h1>
             <p className="text-gray-600">Manage your account information and aviation preferences</p>
@@ -188,7 +224,7 @@ export default function StudentProfilePage() {
                     <input
                       type="text"
                       {...register('firstName')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
                     />
                     {errors.firstName && (
                       <p className="text-sm text-red-600 mt-1">{errors.firstName.message}</p>
@@ -201,7 +237,7 @@ export default function StudentProfilePage() {
                     <input
                       type="text"
                       {...register('lastName')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
                     />
                     {errors.lastName && (
                       <p className="text-sm text-red-600 mt-1">{errors.lastName.message}</p>
@@ -226,7 +262,41 @@ export default function StudentProfilePage() {
                     <input
                       type="tel"
                       {...register('phone')}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">Secondary Email</label>
+                    <input
+                      type="email"
+                      {...register('secondaryEmail')}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Country</label>
+                  <select
+                    {...register('country')}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
+                  >
+                    <option value="">Select country</option>
+                    {COUNTRIES.map((c) => (
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">City</label>
+                    <input
+                      type="text"
+                      {...register('city')}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
                     />
                   </div>
                   <div>
@@ -237,7 +307,7 @@ export default function StudentProfilePage() {
                       type="text"
                       {...register('timezone')}
                       placeholder="UTC"
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
                     />
                     {errors.timezone && (
                       <p className="text-sm text-red-600 mt-1">{errors.timezone.message}</p>
@@ -246,11 +316,11 @@ export default function StudentProfilePage() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">Country</label>
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
                   <input
                     type="text"
-                    {...register('country')}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
+                    {...register('address')}
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
                   />
                 </div>
               </div>
@@ -260,21 +330,42 @@ export default function StudentProfilePage() {
             <Card>
               <h2 className="text-xl font-semibold text-gray-900 mb-6">Aviation Background</h2>
               <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Years of Aviation Experience
+                    </label>
+                    <input
+                      type="number"
+                      min="0"
+                      max="40"
+                      {...register('yearsOfAviationExperience', { valueAsNumber: true })}
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      Current Role
+                    </label>
+                    <input
+                      type="text"
+                      {...register('currentRole')}
+                      placeholder="e.g., Student Pilot, First Officer"
+                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
+                    />
+                  </div>
+                </div>
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Experience Level
+                    Current Company/Airline
                   </label>
-                  <select
-                    {...register('experienceLevel')}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
-                  >
-                    <option value="">Select experience level</option>
-                    {EXPERIENCE_LEVELS.map((level) => (
-                      <option key={level} value={level}>
-                        {level}
-                      </option>
-                    ))}
-                  </select>
+                  <input
+                    type="text"
+                    {...register('currentCompany')}
+                    placeholder="e.g., Flight School, Airline Name"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-sky-blue-500 focus:border-transparent outline-none"
+                  />
                 </div>
 
                 <div>
@@ -310,7 +401,7 @@ export default function StudentProfilePage() {
                         onClick={() => toggleArrayValue('preferredLanguages', lang)}
                         className={`px-3 py-1 rounded-full text-sm transition-colors ${
                           preferredLanguages.includes(lang)
-                            ? 'bg-aviation-blue text-white'
+                            ? 'bg-sky-blue-600 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                         }`}
                       >
@@ -322,38 +413,26 @@ export default function StudentProfilePage() {
 
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Preferred Learning Format
+                    Preferred Aircraft Types
                   </label>
                   <div className="flex flex-wrap gap-2">
-                    {LEARNING_FORMATS.map((format) => (
+                    {AIRCRAFT_TYPES.map((type) => (
                       <button
-                        key={format}
+                        key={type}
                         type="button"
-                        onClick={() => toggleArrayValue('preferredLearningFormat', format)}
+                        onClick={() => toggleArrayValue('preferredAircraftTypes', type)}
                         className={`px-3 py-1 rounded-full text-sm transition-colors ${
-                          preferredLearningFormat.includes(format)
-                            ? 'bg-aviation-blue text-white'
+                          preferredAircraftTypes.includes(type)
+                            ? 'bg-sky-blue-600 text-white'
                             : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                         }`}
                       >
-                        {format}
+                        {type}
                       </button>
                     ))}
                   </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
-                    Preferred Aircraft Types
-                  </label>
-                  <input
-                    type="text"
-                    {...register('preferredAircraftTypes')}
-                    placeholder="e.g., Boeing 737, Airbus A320, Cessna 172..."
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-aviation-blue focus:border-transparent outline-none"
-                  />
-                  <p className="text-xs text-gray-500 mt-1">
-                    List aircraft types you're interested in learning about
+                  <p className="text-xs text-gray-500 mt-2">
+                    Select aircraft types you're interested in learning about
                   </p>
                 </div>
               </div>
@@ -369,7 +448,6 @@ export default function StudentProfilePage() {
             </div>
           </form>
         </div>
-      </main>
-    </div>
+      </div>
   );
 }

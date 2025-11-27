@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import DashboardSidebar from '@/components/layout/DashboardSidebar';
+import { useAuthStore } from '@/store/auth-store';
 import Card from '@/components/ui/Card';
 import Button from '@/components/ui/Button';
 import Badge from '@/components/ui/Badge';
@@ -13,13 +13,24 @@ import { format, parseISO, isAfter } from 'date-fns';
 
 export default function StudentDashboard() {
   const router = useRouter();
+  const user = useAuthStore((state) => state.user);
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [profileComplete, setProfileComplete] = useState(true);
   const [stats, setStats] = useState({
     upcomingLessons: 0,
     totalHours: 0,
     favoriteTutors: 0,
   });
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 18) return 'Good afternoon';
+    return 'Good evening';
+  };
+
+  const firstName = user?.firstName || 'Student';
 
   useEffect(() => {
     fetchBookings();
@@ -81,14 +92,14 @@ export default function StudentDashboard() {
   const nextLesson = getNextUpcomingLesson();
 
   return (
-    <div className="min-h-screen bg-sky-blue-50 flex">
-      <DashboardSidebar role="student" />
-      <main className="flex-1 p-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-navy-900 mb-2">Student Dashboard</h1>
-            <p className="text-navy-600">Welcome back! Here's an overview of your learning journey.</p>
-          </div>
+    <div className="min-h-screen bg-sky-blue-50">
+      <div className="max-w-7xl mx-auto p-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-navy-900 mb-1">
+            {getGreeting()}, {firstName}
+          </h1>
+          <p className="text-navy-600">Welcome back, Student</p>
+        </div>
 
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -133,10 +144,10 @@ export default function StudentDashboard() {
             </Card>
           </div>
 
-          {/* Next Upcoming Lesson */}
+          {/* Upcoming Lessons */}
           <div className="mb-8">
             <Card>
-              <h2 className="text-xl font-semibold text-navy-900 mb-4">Next Upcoming Lesson</h2>
+              <h2 className="text-xl font-semibold text-navy-900 mb-4">Upcoming Lessons</h2>
               {isLoading ? (
                 <div className="text-center py-8">
                   <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-sky-blue-600 mx-auto"></div>
@@ -179,6 +190,15 @@ export default function StudentDashboard() {
                     >
                       View Details
                     </Button>
+                    {nextLesson.meetingLink && (
+                      <Button
+                        variant="outline"
+                        onClick={() => window.open(nextLesson.meetingLink, '_blank')}
+                        className="ml-2"
+                      >
+                        Join (Zoom)
+                      </Button>
+                    )}
                   </div>
                 </div>
               ) : (
@@ -186,12 +206,51 @@ export default function StudentDashboard() {
                   <p className="text-lg mb-2">No upcoming lessons</p>
                   <p className="text-sm mb-4">Book your first lesson to get started!</p>
                   <Link href="/tutors">
-                    <Button variant="primary">Find a Tutor</Button>
+                    <Button variant="primary">Find Instructor</Button>
                   </Link>
                 </div>
               )}
             </Card>
           </div>
+
+          {/* Recent Lessons */}
+          {bookings.filter((b) => b.status === 'completed').length > 0 && (
+            <div className="mb-8">
+              <Card>
+                <h2 className="text-xl font-semibold text-navy-900 mb-4">Recent Lessons</h2>
+                <div className="space-y-4">
+                  {bookings
+                    .filter((b) => b.status === 'completed')
+                    .slice(0, 3)
+                    .map((booking) => (
+                      <div
+                        key={booking.id}
+                        className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 p-4 bg-sky-blue-50 rounded-lg"
+                      >
+                        <div className="flex-1">
+                          <h3 className="text-lg font-semibold text-navy-900 mb-2">
+                            {booking.lessonType || 'Lesson'}
+                          </h3>
+                          <div className="space-y-1 text-sm text-navy-600">
+                            <p>
+                              📅 {format(parseISO(booking.scheduledAt), 'MMM d, yyyy')} at{' '}
+                              {format(parseISO(booking.scheduledAt), 'h:mm a')}
+                            </p>
+                            {booking.tutor?.user && (
+                              <p>
+                                👨‍🏫 Instructor: {booking.tutor.user.firstName} {booking.tutor.user.lastName}
+                              </p>
+                            )}
+                            <p>⏱️ Duration: {booking.durationMinutes} minutes</p>
+                          </div>
+                        </div>
+                        <Badge variant="success">Completed</Badge>
+                      </div>
+                    ))}
+                </div>
+              </Card>
+            </div>
+          )}
 
           {/* Quick Actions */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -216,12 +275,12 @@ export default function StudentDashboard() {
                   <span className="text-2xl">🔍</span>
                 </div>
                 <div>
-                  <h3 className="text-lg font-semibold text-navy-900">Browse Tutors</h3>
-                  <p className="text-sm text-navy-600">Find available aviation tutors</p>
+                  <h3 className="text-lg font-semibold text-navy-900">Find Instructor</h3>
+                  <p className="text-sm text-navy-600">Find available aviation instructors</p>
                 </div>
               </div>
               <Link href="/tutors">
-                <Button variant="primary" className="w-full">Browse Tutors</Button>
+                <Button variant="primary" className="w-full">Find Instructor</Button>
               </Link>
             </Card>
 
@@ -232,7 +291,7 @@ export default function StudentDashboard() {
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-navy-900">Messages</h3>
-                  <p className="text-sm text-navy-600">Chat with your tutors</p>
+                  <p className="text-sm text-navy-600">Chat with your instructors</p>
                 </div>
               </div>
               <Link href="/student/messages">
@@ -240,8 +299,7 @@ export default function StudentDashboard() {
               </Link>
             </Card>
           </div>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }

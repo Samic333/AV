@@ -23,6 +23,14 @@ export class MessagesController {
     return this.messagesService.getMessages(id, user.id);
   }
 
+  @Post('send')
+  async sendMessageToUser(
+    @CurrentUser() user: any,
+    @Body() body: { recipientId: string; content: string; attachmentUrl?: string; attachmentType?: string },
+  ) {
+    return this.messagesService.sendMessage(user.id, body.recipientId, body.content, body.attachmentUrl, body.attachmentType);
+  }
+
   @Post('conversations/:id/messages')
   async sendMessage(
     @Param('id') conversationId: string,
@@ -35,7 +43,7 @@ export class MessagesController {
     return this.messagesService.sendMessage(user.id, recipientId, body.content, body.attachmentUrl, body.attachmentType);
   }
 
-  @Put('conversations/:id/read')
+  @Post('conversations/:id/read')
   async markAsRead(@Param('id') id: string, @CurrentUser() user: any) {
     await this.messagesService.markAsRead(id, user.id);
     return { success: true };
