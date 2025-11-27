@@ -127,5 +127,6 @@ export interface TutorProfileExtended extends TutorProfile {
   previousAirlines?: string;
   targetStudentTypes?: string[];
   country?: string;
+  rejectionReason?: string;
 }
 

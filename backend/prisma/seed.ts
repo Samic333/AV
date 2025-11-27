@@ -22,7 +22,7 @@ async function main() {
       lastName: 'User',
       timezone: 'UTC',
       emailVerified: true,
-    },
+    } as any,
   });
 
   // Create Students
@@ -53,7 +53,7 @@ async function main() {
             preferredAircraftTypes: ['A320', 'B737'],
             currentRole: 'Student Pilot',
             currentCompany: 'Flight School',
-          },
+          } as any,
         },
       },
     });
@@ -187,9 +187,9 @@ async function main() {
                 totalEarned: instructorInfo.totalLessonsTaught * instructorInfo.hourlyRate * 0.85,
               },
             },
-          },
+          } as any,
         },
-      },
+      } as any,
       include: { tutorProfile: true },
     });
     instructors.push(instructor);

@@ -50,18 +50,18 @@ export class UsersService {
         country: data.country,
         address: data.address,
         secondaryEmail: data.secondaryEmail,
-      },
+      } as any,
     });
   }
 
   async getSettings(userId: string) {
-    let settings = await this.prisma.userSettings.findUnique({
+    let settings = await (this.prisma as any).userSettings.findUnique({
       where: { userId },
     });
 
     if (!settings) {
       // Create default settings if they don't exist
-      settings = await this.prisma.userSettings.create({
+      settings = await (this.prisma as any).userSettings.create({
         data: {
           userId,
           theme: 'light',
@@ -76,7 +76,7 @@ export class UsersService {
   }
 
   async updateSettings(userId: string, data: any) {
-    return this.prisma.userSettings.upsert({
+    return (this.prisma as any).userSettings.upsert({
       where: { userId },
       update: {
         theme: data.theme,

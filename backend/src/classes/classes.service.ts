@@ -52,7 +52,7 @@ export class ClassesService {
       where: { 
         status: 'approved',
         isFeatured: true,
-      },
+      } as any,
       take: 6,
       include: {
         tutor: {
@@ -141,7 +141,7 @@ export class ClassesService {
         airlineFocus: data.airlineFocus,
         isFeatured: data.isFeatured || false,
         status: 'pending_approval',
-      },
+      } as any,
     });
   }
 
@@ -225,7 +225,7 @@ export class ClassesService {
         aircraftType: data.aircraftType,
         airlineFocus: data.airlineFocus,
         isFeatured: data.isFeatured || false,
-      },
+      } as any,
     });
   }
 

@@ -117,7 +117,7 @@ export default function AdminStudentsPage() {
                       </td>
                       <td className="py-3 px-4">
                         {student.deletedAt ? (
-                          <Badge variant="error">Suspended</Badge>
+                          <Badge variant="danger">Suspended</Badge>
                         ) : (
                           <Badge variant="success">Active</Badge>
                         )}

@@ -346,7 +346,7 @@ export class TutorsService {
         tutorProfile: {
           status: 'approved',
           isFeatured: true,
-        },
+        } as any,
       },
       take: 6,
       include: {

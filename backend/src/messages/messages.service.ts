@@ -130,7 +130,7 @@ export class MessagesService {
           attachmentType,
           isFlagged: true,
           flaggedReason: contactCheck.reason || 'Contact information detected',
-        },
+        } as any,
         include: {
           sender: {
             select: {
@@ -213,7 +213,7 @@ export class MessagesService {
 
   async getFlaggedMessages() {
     return this.prisma.message.findMany({
-      where: { isFlagged: true },
+      where: { isFlagged: true } as any,
       include: {
         sender: {
           select: {

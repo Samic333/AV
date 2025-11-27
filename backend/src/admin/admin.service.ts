@@ -14,7 +14,7 @@ export class AdminService {
       this.prisma.tutorProfile.count({ where: { status: 'pending' } }),
       this.prisma.groupClass.count({ where: { status: 'pending_approval' } }),
       this.prisma.transaction.findMany({ where: { type: 'payment', status: 'completed' } }),
-      this.prisma.expense.findMany(),
+      (this.prisma as any).expense.findMany(),
     ]);
 
     const totalRevenue = transactions.reduce((sum, t) => sum + Number(t.platformFee || 0), 0);
@@ -23,9 +23,12 @@ export class AdminService {
     const profit = totalRevenue - totalExpenses;
 
     // Get user distribution by country
-    const usersByCountry = await this.prisma.user.groupBy({
+    const usersByCountry = await (this.prisma.user.groupBy as any)({
       by: ['country'],
-      where: { deletedAt: null, country: { not: null } },
+      where: { 
+        deletedAt: null,
+        country: { not: null },
+      },
       _count: { country: true },
     });
 
@@ -205,7 +208,7 @@ export class AdminService {
       startDate.setDate(1);
     }
 
-    return this.prisma.expense.findMany({
+    return (this.prisma as any).expense.findMany({
       where: {
         date: { gte: startDate, lte: endDate },
       },
@@ -214,7 +217,7 @@ export class AdminService {
   }
 
   async getExpensesOld() {
-    return this.prisma.expense.findMany({
+    return (this.prisma as any).expense.findMany({
       orderBy: { date: 'desc' },
     });
   }
@@ -242,7 +245,7 @@ export class AdminService {
           status: 'completed',
         },
       }),
-      this.prisma.expense.findMany({
+      (this.prisma as any).expense.findMany({
         where: {
           date: { gte: startDate, lte: endDate },
         },
@@ -263,7 +266,7 @@ export class AdminService {
   }
 
   async createExpense(data: { description: string; amount: number; category?: string; date: Date; createdBy?: string }) {
-    return this.prisma.expense.create({
+    return (this.prisma as any).expense.create({
       data: {
         description: data.description,
         amount: data.amount,
@@ -276,7 +279,7 @@ export class AdminService {
 
   async getFlaggedMessages() {
     return this.prisma.message.findMany({
-      where: { isFlagged: true },
+      where: { isFlagged: true } as any,
       include: {
         sender: {
           select: {
