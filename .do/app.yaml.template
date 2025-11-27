@@ -1,0 +1,75 @@
+# DigitalOcean App Platform Configuration Template
+# Copy this file to app.yaml and fill in your actual values
+
+name: aviatortutor
+region: nyc  # Change to your preferred region (nyc, sfo, ams, etc.)
+
+# Backend API Service
+services:
+  - name: backend
+    github:
+      repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME  # e.g., "username/aviatortutor"
+      branch: main
+      deploy_on_push: true
+    source_dir: backend
+    build_command: npm ci && npx prisma generate && npm run build && npx prisma migrate deploy
+    run_command: npm run start:prod
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs  # Start small, scale as needed
+    http_port: 3001
+    health_check:
+      http_path: /api/health
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3001"
+      - key: DATABASE_URL
+        value: ${db.DATABASE_URL}
+        type: SECRET
+      - key: JWT_SECRET
+        value: YOUR_JWT_SECRET_HERE  # Generate with: openssl rand -base64 32
+        type: SECRET
+      - key: JWT_REFRESH_SECRET
+        value: YOUR_JWT_REFRESH_SECRET_HERE  # Generate with: openssl rand -base64 32
+        type: SECRET
+      - key: JWT_EXPIRES_IN
+        value: "7d"
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: "30d"
+      - key: FRONTEND_URL
+        value: https://YOUR_FRONTEND_DOMAIN.com  # e.g., "https://aviatortutor.com"
+    routes:
+      - path: /api
+
+  - name: frontend
+    github:
+      repo: YOUR_GITHUB_USERNAME/YOUR_REPO_NAME  # Same as backend
+      branch: main
+      deploy_on_push: true
+    source_dir: frontend
+    build_command: npm ci && npm run build
+    run_command: npm start
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs  # Start small, scale as needed
+    http_port: 3000
+    health_check:
+      http_path: /
+    envs:
+      - key: NODE_ENV
+        value: production
+      - key: NEXT_PUBLIC_API_URL
+        value: https://YOUR_BACKEND_DOMAIN.com/api  # e.g., "https://api.aviatortutor.com/api"
+    routes:
+      - path: /
+
+# Managed PostgreSQL Database
+databases:
+  - name: db
+    engine: PG
+    version: "15"
+    production: true
+    cluster_name: aviatortutor-db
+

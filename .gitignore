@@ -41,7 +41,8 @@ uploads/
 temp/
 
 # Prisma
-backend/prisma/migrations/
+# Note: migrations/ should be committed for production deployments
+# backend/prisma/migrations/
 
 # Logs
 logs/
